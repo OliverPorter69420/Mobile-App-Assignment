@@ -37,9 +37,6 @@ fun PageNavigator(
             SearchScreen(
                 navigateToBookDescription = { navController.navigate(BookDescriptionLocation.route) },
                 backToHome = { navController.navigate(HomeLocation.route) },
-                bookViewModel = viewModel(
-                    factory = BookViewModel.Factory
-                )
             )
         }
 

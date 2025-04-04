@@ -18,8 +18,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
+import com.example.dissertation_app.ui.items.BookViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
 
 object HomeLocation : NavigationDestination {
@@ -33,6 +35,8 @@ fun HomeScreen(
     navigateToSearch: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val bookViewModel: BookViewModel? = viewModel(factory = BookViewModel.Factory)
+    SearchLocation.bookViewModel(bookViewModel)
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

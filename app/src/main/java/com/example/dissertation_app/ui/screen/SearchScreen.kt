@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.ui.items.BookMenu
@@ -25,6 +26,15 @@ import com.example.dissertation_app.ui.navigation.NavigationDestination
 object SearchLocation : NavigationDestination {
     override val route = "search"
     override val titleRes = R.string.search_screen
+    private var bookViewModel: BookViewModel? = null
+
+    fun getBookViewModel(): BookViewModel? {
+        return bookViewModel
+    }
+
+    fun bookViewModel(viewModel: BookViewModel?) {
+        bookViewModel = viewModel
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,9 +42,9 @@ object SearchLocation : NavigationDestination {
 fun SearchScreen (
     navigateToBookDescription: () -> Unit,
     backToHome: () -> Unit,
-    bookViewModel: BookViewModel,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val bookViewModel: BookViewModel? = SearchLocation.getBookViewModel()
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -70,14 +80,16 @@ fun SearchScreen (
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                BookMenu(
-                    bookUiState = bookViewModel.bookUiState,
-                    getBooks = bookViewModel::getBooks,
-                    getTextBarFunctionality = bookViewModel::updateSearchTerm,
-                    resetAction = bookViewModel::resetSearchTerm,
-                    navigateToBookDescription = navigateToBookDescription,
-                    modifier = Modifier,
-                )
+                bookViewModel?.let { bookViewModel ->
+                    BookMenu(
+                        bookUiState = bookViewModel.bookUiState,
+                        getBooks = bookViewModel::getBooks,
+                        getTextBarFunctionality = bookViewModel::updateSearchTerm,
+                        resetAction = bookViewModel::resetSearchTerm,
+                        navigateToBookDescription = navigateToBookDescription,
+                        modifier = Modifier,
+                    )
+                }
             }
         }
     }
