@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.ui.items.BookMenu
@@ -33,9 +32,7 @@ object SearchLocation : NavigationDestination {
 fun SearchScreen (
     navigateToBookDescription: () -> Unit,
     backToHome: () -> Unit,
-    bookViewModel: BookViewModel = viewModel(
-        factory = BookViewModel.Factory
-    )
+    bookViewModel: BookViewModel,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
