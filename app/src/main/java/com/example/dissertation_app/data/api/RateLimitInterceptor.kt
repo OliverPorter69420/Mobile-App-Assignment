@@ -1,4 +1,4 @@
-package com.example.dissertation_app.data
+package com.example.dissertation_app.data.api
 import okhttp3.Interceptor
 import okhttp3.Response
 

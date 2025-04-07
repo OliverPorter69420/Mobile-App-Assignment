@@ -1,4 +1,4 @@
-package com.example.dissertation_app.data
+package com.example.dissertation_app.data.api
 
 import com.example.dissertation_app.network.BookApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory

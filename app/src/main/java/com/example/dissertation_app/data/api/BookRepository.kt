@@ -1,4 +1,4 @@
-package com.example.dissertation_app.data
+package com.example.dissertation_app.data.api
 
 import com.example.dissertation_app.model.BookObjects
 import com.example.dissertation_app.model.BookResponse

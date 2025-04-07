@@ -1,12 +1,8 @@
 package com.example.dissertation_app
 
-import androidx.compose.foundation.layout.size
-import com.example.dissertation_app.data.AppContainer
-import com.example.dissertation_app.data.DefaultAppContainer
-import com.example.dissertation_app.data.NetworkBookRepository
+import com.example.dissertation_app.data.api.AppContainer
+import com.example.dissertation_app.data.api.DefaultAppContainer
 import com.example.dissertation_app.model.BookObjects
-import com.example.dissertation_app.model.BookResponse
-import com.example.dissertation_app.network.BookApiService
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import org.junit.Test
