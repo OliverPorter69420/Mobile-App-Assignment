@@ -1,5 +1,8 @@
-package com.example.dissertation_app.data.api
+package com.example.dissertation_app.data
 
+import com.example.dissertation_app.data.api.BookRepository
+import com.example.dissertation_app.data.api.NetworkBookRepository
+import com.example.dissertation_app.data.api.RateLimitInterceptor
 import com.example.dissertation_app.network.BookApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
