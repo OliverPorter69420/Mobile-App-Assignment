@@ -811,7 +811,7 @@ class ExampleUnitTest {
 
         var container: AppContainer = DefaultAppContainer()
 
-        var books = container.bookRepository.getBooks().items
+        var books = container.bookRepository.getBooks("Harry+Potter").items
 
         if (books != null) {
             println("empty list")
