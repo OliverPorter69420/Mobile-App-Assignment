@@ -3,4 +3,8 @@
     <string name="home_screen">Home</string>
     <string name="search_screen">Search</string>
     <string name="book_description_screen">Book Description</string>
+    <string name="titletextview">titleTextView</string>
+    <string name="authortextview">authorTextView</string>
+    <string name="book_cover_description">Book Cover</string>
+    <string name="descriptiontextview">description</string>
 </resources>

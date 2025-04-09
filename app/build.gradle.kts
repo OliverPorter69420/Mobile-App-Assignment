@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-    id("com.google.devtools.ksp") version "2.1.0-1.0.29"
+    id("com.google.devtools.ksp") version "2.1.20-1.0.32"
     id("kotlin-parcelize")
     kotlin("plugin.parcelize")
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
@@ -108,7 +108,4 @@ dependencies {
 
     // recycle view
     implementation("androidx.recyclerview:recyclerview:1.4.0")
-
-    // firebase dataset
-    implementation("com.google.firebase:firebase-database:21.0.0")
 }
