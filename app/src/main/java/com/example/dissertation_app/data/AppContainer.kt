@@ -13,6 +13,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import java.io.File
 
 interface AppContainer {
     val bookRepository: BookRepository
@@ -31,6 +32,12 @@ class DefaultAppContainer(
 
     private val httpClient = OkHttpClient.Builder()
         .addInterceptor(RateLimitInterceptor())
+        .cache(
+            okhttp3.Cache(
+                directory = File(context.cacheDir, "http_cache"),
+                maxSize = 50L * 1024L * 1024L
+            )
+        )
         .build()
 
     private var retrofit: Retrofit = Retrofit.Builder()
