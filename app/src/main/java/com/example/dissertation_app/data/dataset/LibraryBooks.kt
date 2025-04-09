@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class LibraryBooks (
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+    val bookId: String,
     val title: String,
     val author: String,
     val description: String,
