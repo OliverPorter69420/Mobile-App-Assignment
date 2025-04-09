@@ -62,7 +62,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // viewmodels
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
 
     // Retrofit
@@ -104,5 +106,9 @@ dependencies {
     implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
     implementation("androidx.room:room-paging:${rootProject.extra["room_version"]}")
 
+    // recycle view
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
 
+    // firebase dataset
+    implementation("com.google.firebase:firebase-database:21.0.0")
 }
