@@ -41,8 +41,4 @@ class LibraryBookViewModel(
     suspend fun updateLibraryBook(libraryBook: LibraryBooks) {
         libraryRepository.updateLibraryBook(libraryBook)
     }
-
-    suspend fun insertLibraryBook(libraryBook: LibraryBooks) {
-        libraryRepository.insertLibraryBook(libraryBook)
-    }
 }
