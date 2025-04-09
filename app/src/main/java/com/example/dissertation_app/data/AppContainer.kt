@@ -1,8 +1,12 @@
 package com.example.dissertation_app.data
 
+import android.content.Context
 import com.example.dissertation_app.data.api.BookRepository
 import com.example.dissertation_app.data.api.NetworkBookRepository
 import com.example.dissertation_app.data.api.RateLimitInterceptor
+import com.example.dissertation_app.data.dataset.LibraryBookDatabase
+import com.example.dissertation_app.data.dataset.LibraryBooksRepository
+import com.example.dissertation_app.data.dataset.LocalLibraryRepository
 import com.example.dissertation_app.network.BookApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -12,9 +16,13 @@ import retrofit2.Retrofit
 
 interface AppContainer {
     val bookRepository: BookRepository
+
+    val libraryBookRepository : LibraryBooksRepository
 }
 
-class DefaultAppContainer : AppContainer {
+class DefaultAppContainer(
+    private val context: Context
+) : AppContainer {
 
     private var baseUrl =
         "https://www.googleapis.com/books/v1/"
@@ -35,5 +43,11 @@ class DefaultAppContainer : AppContainer {
 
     override val bookRepository: BookRepository by lazy {
         NetworkBookRepository(retrofitService)
+    }
+
+    override val libraryBookRepository: LibraryBooksRepository by lazy {
+        LocalLibraryRepository(
+            LibraryBookDatabase.getDatabase(context).libraryBooksDao()
+        )
     }
 }
