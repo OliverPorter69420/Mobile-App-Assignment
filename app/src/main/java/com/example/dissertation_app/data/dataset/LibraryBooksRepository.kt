@@ -1,11 +1,10 @@
 package com.example.dissertation_app.data.dataset
 
-import kotlinx.coroutines.flow.Flow
 
 interface LibraryBooksRepository {
-    fun getLibraryBooksStream(): Flow<List<LibraryBooks>>
+    fun getLibraryBooksStream(): List<LibraryBooks>
 
-    fun getLibraryBookStream(id: Int): Flow<LibraryBooks?>
+    fun getLibraryBookStream(id: Int): LibraryBooks?
 
     suspend fun insertLibraryBook(libraryBook: LibraryBooks)
 

@@ -1,0 +1,28 @@
+package com.example.dissertation_app.ui.items
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.dissertation_app.R
+
+class BookFragment : Fragment(){
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: LibraryBookAdapter
+    private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var viewModel: LibraryBookViewModel
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_book, container, false)
+        recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = layoutManager
+        adapter = LibraryBookAdapter(requireContext(), viewModel.getLibraryBooks().value)
+        recyclerView.adapter = adapter
+        return view
+    }
+}
+

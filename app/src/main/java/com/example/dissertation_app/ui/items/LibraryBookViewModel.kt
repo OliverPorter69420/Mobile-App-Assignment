@@ -9,25 +9,28 @@ import kotlinx.coroutines.flow.Flow
 class LibraryBookViewModel(
     private val libraryRepository: LocalLibraryRepository
 ){
-    private val libraryBooks: MutableLiveData<Flow<List<LibraryBooks>>> = MutableLiveData()
-    private val libraryBook: MutableLiveData<Flow<LibraryBooks?>> = MutableLiveData()
+    private val _libraryBooks = MutableLiveData<List<LibraryBooks>>()
+    val libraryBooks: LiveData<List<LibraryBooks>> = _libraryBooks
 
-    fun getLibraryBooks(): LiveData<Flow<List<LibraryBooks>>> {
+    private val _libraryBook =  MutableLiveData<LibraryBooks?>()
+    val libraryBook: LiveData<LibraryBooks?> = _libraryBook
+
+    fun getLibraryBooks(): LiveData<List<LibraryBooks>> {
         return libraryBooks
     }
 
-    fun getLibraryBook(): LiveData<Flow<LibraryBooks?>> {
+    fun getLibraryBook(): LiveData<LibraryBooks?> {
         return libraryBook
     }
 
     suspend fun loadLibraryBooks() {
         val books = libraryRepository.getLibraryBooksStream()
-        libraryBooks.postValue(books)
+        _libraryBooks.postValue(books)
     }
 
     suspend fun searchLibraryBook(id: Int) {
         val book = libraryRepository.getLibraryBookStream(id)
-        libraryBook.postValue(book)
+        _libraryBook.postValue(book)
     }
 
     suspend fun addLibraryBook(libraryBook: LibraryBooks) {
