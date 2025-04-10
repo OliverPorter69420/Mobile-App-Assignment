@@ -28,4 +28,6 @@ class LibraryScreen(
     val bookViewModel: BookViewModel? = SearchLocation.getBookViewModel()
 
     val bookFragment = BookFragment(libraryBookViewModel!!)
+
+    // TODO: finish this section off and then add in functionality to add books into the library database, will likely all work but idk 
 }
