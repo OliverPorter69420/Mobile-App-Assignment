@@ -21,6 +21,7 @@ import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.ui.items.BookMenu
 import com.example.dissertation_app.ui.items.BookViewModel
+import com.example.dissertation_app.ui.items.LibraryBookViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
 
 object SearchLocation : NavigationDestination {
@@ -45,6 +46,7 @@ fun SearchScreen (
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val bookViewModel: BookViewModel? = SearchLocation.getBookViewModel()
+    val libraryBookViewModel: LibraryBookViewModel? = LibraryLocation.getLibraryBookViewModel()
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

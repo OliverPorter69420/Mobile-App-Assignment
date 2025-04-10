@@ -18,7 +18,7 @@ import java.io.File
 interface AppContainer {
     val bookRepository: BookRepository
 
-    val libraryBookRepository : LibraryBooksRepository
+    val libraryBookRepository : LocalLibraryRepository
 }
 
 class DefaultAppContainer(
@@ -52,7 +52,7 @@ class DefaultAppContainer(
         NetworkBookRepository(retrofitService)
     }
 
-    override val libraryBookRepository: LibraryBooksRepository by lazy {
+    override val libraryBookRepository: LocalLibraryRepository by lazy {
         LocalLibraryRepository(
             LibraryBookDatabase.getDatabase(context).libraryBooksDao()
         )

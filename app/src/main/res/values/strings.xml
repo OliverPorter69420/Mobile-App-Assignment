@@ -7,4 +7,5 @@
     <string name="authortextview">authorTextView</string>
     <string name="book_cover_description">Book Cover</string>
     <string name="descriptiontextview">description</string>
+    <string name="library_screen">library screen\n</string>
 </resources>
