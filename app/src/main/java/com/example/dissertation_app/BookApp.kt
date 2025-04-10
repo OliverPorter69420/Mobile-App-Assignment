@@ -28,9 +28,14 @@ fun BookTopAppBar(
     canNavigateBack: Boolean,
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    navigateUp: () -> Unit = {}
+    navigateUp: () -> Unit = {},
+    buttonFunctionality: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
+
+        // TODO: add in a button function which will allow the user to do functionalities defined in a pasted in function
+        // 3 atm are an account page, a save book button and sync with the database button
+
         title = {
             Text(
                 text = title,

@@ -53,7 +53,8 @@ fun BookDescriptionPage(
                 title = "Book Information",
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
-                navigateUp = backToSearch
+                navigateUp = backToSearch,
+                buttonFunctionality = {/*TODO add in the insert library book functionality here */}
             )
         }
 
@@ -72,10 +73,6 @@ fun BookDescriptionPage(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "Save")
-                }
             }
 
             Text(
