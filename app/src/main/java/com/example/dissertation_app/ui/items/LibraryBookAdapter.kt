@@ -11,7 +11,7 @@ import com.example.dissertation_app.data.dataset.LibraryBooks
 
 class LibraryBookAdapter (
     private val context: Context,
-    private val libraryBooks: List<LibraryBooks>?
+    private var libraryBooks: List<LibraryBooks>?
 ) : RecyclerView.Adapter<LibraryBookAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_library_book, parent, false)
@@ -25,6 +25,10 @@ class LibraryBookAdapter (
 
     override fun getItemCount(): Int {
         return libraryBooks?.size ?: 0
+    }
+
+    fun setLibraryBooks(libraryBooks: List<LibraryBooks>?) {
+        this.libraryBooks = libraryBooks
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
