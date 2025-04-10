@@ -1,20 +1,35 @@
 package com.example.dissertation_app.ui.items
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.dissertation_app.BookApplication
 import com.example.dissertation_app.data.dataset.LibraryBooks
 import com.example.dissertation_app.data.dataset.LocalLibraryRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+
+sealed interface LibraryBookUiState {
+    data class Success(val libraryBooks: List<LibraryBooks>, val libraryBook: LibraryBooks?) : LibraryBookUiState
+    object Error : LibraryBookUiState
+    object Empty : LibraryBookUiState
+}
 
 class LibraryBookViewModel(
     private val libraryRepository: LocalLibraryRepository
 ) : ViewModel() {
+
+    var libraryBookUiState: LibraryBookUiState by mutableStateOf(LibraryBookUiState.Empty)
+        private set
+
     private val _libraryBooks = MutableLiveData<List<LibraryBooks>>()
     val libraryBooks: LiveData<List<LibraryBooks>> = _libraryBooks
 
@@ -31,12 +46,33 @@ class LibraryBookViewModel(
         }
     }
 
-    fun getLibraryBooks(): LiveData<List<LibraryBooks>> {
-        return libraryBooks
+    fun getLibraryBooks() {
+        libraryBookUiState = try {
+
+            viewModelScope.launch {
+                loadLibraryBooks()
+            }
+
+            LibraryBookUiState.Success(libraryBooks = libraryBooks.value!!, libraryBook = libraryBook.value!!)
+
+        } catch (e: Exception) {
+
+            LibraryBookUiState.Error
+
+        }
     }
 
-    fun getLibraryBook(): LiveData<LibraryBooks?> {
-        return libraryBook
+    fun getLibraryBook(id: Int) {
+        libraryBookUiState = try {
+            viewModelScope.launch {
+                searchLibraryBook(id)
+            }
+
+            LibraryBookUiState.Success(libraryBooks = libraryBooks.value!!, libraryBook = libraryBook.value)
+
+        } catch (e: Exception) {
+            LibraryBookUiState.Error
+        }
     }
 
     suspend fun loadLibraryBooks() {
