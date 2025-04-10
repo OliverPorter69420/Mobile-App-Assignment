@@ -46,8 +46,8 @@ class BookFragment(
                 adapter.setLibraryBooks(books)
             })
 
-            LibraryBookUiState.Empty -> TODO()
-            LibraryBookUiState.Error -> TODO()
+            LibraryBookUiState.Empty -> "database is empty"
+            LibraryBookUiState.Error -> "an error occurred"
         }
     }
 }
