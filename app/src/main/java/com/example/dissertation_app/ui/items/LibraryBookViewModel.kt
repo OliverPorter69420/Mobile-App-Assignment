@@ -1,5 +1,6 @@
 package com.example.dissertation_app.ui.items
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,8 +15,10 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.dissertation_app.BookApplication
 import com.example.dissertation_app.data.dataset.LibraryBooks
 import com.example.dissertation_app.data.dataset.LocalLibraryRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 
 sealed interface LibraryBookUiState {
     data class Success(val libraryBooks: List<LibraryBooks>, val libraryBook: LibraryBooks?) : LibraryBookUiState
@@ -50,7 +53,7 @@ class LibraryBookViewModel(
     fun getLibraryBooks() {
         libraryBookUiState = try {
 
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 loadLibraryBooks()
             }
 
@@ -65,7 +68,7 @@ class LibraryBookViewModel(
 
     fun getLibraryBook(id: Int) {
         libraryBookUiState = try {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 searchLibraryBook(id)
             }
 
@@ -77,7 +80,7 @@ class LibraryBookViewModel(
     }
 
     fun loadLibraryBooks() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             libraryBookUiState = try {
                 val books = libraryRepository.getLibraryBooksStream()
                 _libraryBooks.postValue(books)
@@ -89,7 +92,7 @@ class LibraryBookViewModel(
     }
 
     fun searchLibraryBook(id: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             libraryBookUiState = try {
                 val book = libraryRepository.getLibraryBookStream(id)
                 _libraryBook.postValue(book)
@@ -101,18 +104,22 @@ class LibraryBookViewModel(
     }
 
     fun addLibraryBook(libraryBook: LibraryBooks) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             libraryBookUiState = try {
                 libraryRepository.insertLibraryBook(libraryBook)
                 LibraryBookUiState.FunctionSuccess
             } catch (e: Exception) {
+                Log.d("LibraryBookViewModel", "addLibraryBook: $e")
                 LibraryBookUiState.Error
             }
+
+            Log.d("LibraryBookViewModel", "addLibraryBook: $libraryBook")
+            Log.d("LibraryBookViewModel", "addLibraryBook: $libraryBookUiState")
         }
     }
 
     fun deleteLibraryBook(libraryBook: LibraryBooks) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             libraryBookUiState = try {
                 libraryRepository.deleteLibraryBook(libraryBook)
                 LibraryBookUiState.FunctionSuccess
@@ -123,7 +130,7 @@ class LibraryBookViewModel(
     }
 
     fun updateLibraryBook(libraryBook: LibraryBooks) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             libraryBookUiState = try {
                 libraryRepository.updateLibraryBook(libraryBook)
                 LibraryBookUiState.FunctionSuccess

@@ -1,5 +1,6 @@
 package com.example.dissertation_app.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -66,7 +67,13 @@ fun BookDescriptionPage(
                 buttonFunctionality = {
                     val book = bookInformation.toLibraryBook()
 
-                    libraryBookViewModel?.addLibraryBook(book)
+                    if (book != null) {
+                        libraryBookViewModel?.addLibraryBook(book)
+                    } else {
+                        Log.d("BookDescriptionPage", "book is null")
+                    }
+
+                    /*todo: make it so that bookmarks can only be added/removed from the library*/
                 },
                 icon = icon,
                 iconDescription = "add to library"
@@ -108,12 +115,16 @@ fun BookDescriptionPage(
     }
 }
 
-private fun BookObjects?.toLibraryBook() : LibraryBooks {
-    return LibraryBooks(
-        bookId = this?.id.toString(),
-        title = this?.volumeInfo?.title.toString(),
-        author = this?.volumeInfo?.authors.toString(),
-        description = this?.volumeInfo?.description.toString(),
-        imageUrl = this?.volumeInfo?.imageLinks?.thumbnail.toString(),
-    )
+private fun BookObjects?.toLibraryBook() : LibraryBooks? {
+    return if (this == null) {
+        null
+    } else {
+        LibraryBooks(
+            bookId = this.id?.toString() ?: "null",
+            title = this.volumeInfo?.title?.toString() ?: "null",
+            author = this.volumeInfo?.authors?.joinToString(",") ?: "null",
+            description = this.volumeInfo?.description?.toString() ?: "null",
+            imageUrl = this.volumeInfo?.imageLinks?.thumbnail?.toString() ?: "null",
+        )
+    }
 }
