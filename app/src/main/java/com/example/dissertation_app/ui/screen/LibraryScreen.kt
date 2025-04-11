@@ -1,28 +1,28 @@
 package com.example.dissertation_app.ui.screen
 
-import android.R.attr.bottom
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CloudDownload
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -74,7 +74,7 @@ fun LibraryScreen(
     var showCreateLibrary by remember { mutableStateOf(false) }
     var currentLibraryName by remember { mutableStateOf("") }
 
-    Scaffold (
+    Scaffold(
         topBar = {
             BookTopAppBar(
                 title = "Library Screen",
@@ -84,8 +84,11 @@ fun LibraryScreen(
         },
 
         bottomBar = {
-
-            if (showCreateLibrary) {
+            AnimatedVisibility(
+                visible = true,
+                enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
+            ) {
                 CreateLibrary(
                     createFunction = {
                         currentLibraryName = it
@@ -94,7 +97,13 @@ fun LibraryScreen(
                         showCreateLibrary = false
                     }
                 )
-            } else {
+            }
+
+            AnimatedVisibility(
+                visible = !showCreateLibrary,
+                enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
+            ) {
                 AddNewLibraries(
                     circularButtonFunction = {
                         showCreateLibrary = true
@@ -103,12 +112,14 @@ fun LibraryScreen(
                     uploadingButtonFunction = {}
                 )
             }
-        }
+        },
     ) {
         Column(
             modifier = Modifier.padding(it)
         ) {
-            Text(text = currentLibraryName)
+            if (currentLibraryName != "") {
+                Text(text = currentLibraryName)
+            }
         }
     }
 }
