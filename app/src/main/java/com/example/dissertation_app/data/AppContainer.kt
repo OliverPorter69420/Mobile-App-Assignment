@@ -5,7 +5,9 @@ import com.example.dissertation_app.data.api.BookRepository
 import com.example.dissertation_app.data.api.NetworkBookRepository
 import com.example.dissertation_app.data.api.RateLimitInterceptor
 import com.example.dissertation_app.data.dataset.LibraryBookDatabase
+import com.example.dissertation_app.data.dataset.library.LocalLibraryRepository
 import com.example.dissertation_app.data.dataset.libraryBook.LocalLibraryBookRepository
+import com.example.dissertation_app.data.dataset.savedLibraries.LocalSavedLibrariesRepository
 import com.example.dissertation_app.network.BookApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -18,6 +20,10 @@ interface AppContainer {
     val bookRepository: BookRepository
 
     val libraryBookRepository : LocalLibraryBookRepository
+
+    val libraryRepository : LocalLibraryRepository
+
+    val savedLibrariesRepository : LocalSavedLibrariesRepository
 }
 
 class DefaultAppContainer(
@@ -54,6 +60,18 @@ class DefaultAppContainer(
     override val libraryBookRepository: LocalLibraryBookRepository by lazy {
         LocalLibraryBookRepository(
             LibraryBookDatabase.getDatabase(context).libraryBooksDao()
+        )
+    }
+
+    override val libraryRepository: LocalLibraryRepository by lazy {
+        LocalLibraryRepository(
+            LibraryBookDatabase.getDatabase(context).librariesDao()
+        )
+    }
+
+    override val savedLibrariesRepository: LocalSavedLibrariesRepository by lazy {
+        LocalSavedLibrariesRepository(
+            LibraryBookDatabase.getDatabase(context).savedLibrariesDao()
         )
     }
 }

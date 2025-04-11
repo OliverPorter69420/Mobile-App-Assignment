@@ -5,15 +5,20 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.dissertation_app.data.dataset.library.Libraries
+import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
 
 @Dao
 interface SavedLibrariesDao {
-    @Query("SELECT * FROM saved_libraries WHERE libraryId = :libraryId")
-    fun getBooksInLibrary(libraryId: Int): List<SavedLibraries>
+    @Query("SELECT * FROM libraries INNER JOIN saved_libraries ON libraries.id = saved_libraries.libraryId")
+    fun getLibrariesInSavedLibrary(libraryId: Int): List<Libraries>
+
+    @Query("SELECT * FROM library_books INNER JOIN saved_libraries ON library_books.id = saved_libraries.bookID WHERE libraryId = :libraryId")
+    fun getBooksInLibrary(libraryId: Int): List<LibraryBooks>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun saveBookInLibrary(savedLibrary: SavedLibraries)
 
-    @Delete
-    fun removeBookFromLibrary(savedLibrary: SavedLibraries)
+    @Query("DELETE FROM saved_libraries WHERE libraryId = :libraryId AND bookID = :bookID")
+    fun removeBookFromLibrary(libraryId: Int, bookID: Int)
 }
