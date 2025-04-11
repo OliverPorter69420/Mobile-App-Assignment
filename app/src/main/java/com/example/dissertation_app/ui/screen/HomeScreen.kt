@@ -2,6 +2,8 @@ package com.example.dissertation_app.ui.screen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,13 +44,18 @@ fun HomeScreen(
     val libraryBookViewModel: LibraryBookViewModel? = viewModel(factory = LibraryBookViewModel.Factory)
     LibraryLocation.libraryBookViewModel(libraryBookViewModel)
 
+    val icon = Icons.Filled.Person
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BookTopAppBar(
                 title = "Main Screen",
                 canNavigateBack = false,
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                buttonFunctionality = {/*TODO add in the insert account functionality here */},
+                icon = icon,
+                iconDescription = "account"
             )
         }
     ) {

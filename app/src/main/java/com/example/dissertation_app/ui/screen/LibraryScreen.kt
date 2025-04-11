@@ -1,5 +1,8 @@
 package com.example.dissertation_app.ui.screen
 
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import com.example.dissertation_app.R
 import com.example.dissertation_app.ui.items.BookFragment
 import com.example.dissertation_app.ui.items.BookViewModel
@@ -20,7 +23,8 @@ object LibraryLocation : NavigationDestination {
     }
 }
 
-class LibraryScreen(
+@Composable
+fun LibraryScreen(
     navigateToBookDescription: () -> Unit,
     navigateToHome: () -> Unit,
 ) {
@@ -29,5 +33,8 @@ class LibraryScreen(
 
     val bookFragment = BookFragment(libraryBookViewModel!!)
 
-    // TODO: finish this section off and then add in functionality to add books into the library database, will likely all work but idk 
+    Scaffold () {
+        it
+        Text(text = "Library Screen")
+    }
 }

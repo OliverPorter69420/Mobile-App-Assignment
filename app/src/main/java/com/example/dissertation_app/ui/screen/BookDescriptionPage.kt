@@ -1,12 +1,14 @@
 package com.example.dissertation_app.ui.screen
 
+import android.view.Menu
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -42,6 +44,7 @@ fun BookDescriptionPage(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val bookInformation = BookDescriptionLocation.getBookInformation()
+    val icon = Icons.Filled.Bookmark
 
     Scaffold (
         modifier = Modifier
@@ -54,7 +57,9 @@ fun BookDescriptionPage(
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = backToSearch,
-                buttonFunctionality = {/*TODO add in the insert library book functionality here */}
+                buttonFunctionality = {/*TODO add in the insert library book functionality here */},
+                icon = icon,
+                iconDescription = "add to library"
             )
         }
 
