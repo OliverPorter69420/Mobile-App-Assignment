@@ -35,7 +35,8 @@ object HomeLocation : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navigateToSearch: () -> Unit
+    navigateToSearch: () -> Unit,
+    navigateToAccount: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val bookViewModel: BookViewModel? = viewModel(factory = BookViewModel.Factory)
@@ -53,7 +54,7 @@ fun HomeScreen(
                 title = "Main Screen",
                 canNavigateBack = false,
                 scrollBehavior = scrollBehavior,
-                buttonFunctionality = {/*TODO add in the insert account functionality here */},
+                buttonFunctionality = navigateToAccount,
                 icon = icon,
                 iconDescription = "account"
             )
