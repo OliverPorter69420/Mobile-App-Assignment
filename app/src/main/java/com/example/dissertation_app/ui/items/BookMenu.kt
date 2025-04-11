@@ -39,7 +39,6 @@ import coil.transform.Transformation
 import com.example.dissertation_app.R
 import com.example.dissertation_app.model.BookObjects
 import com.example.dissertation_app.ui.screen.BookDescriptionLocation
-import com.example.dissertation_app.ui.screen.BookDescriptionPage
 
 
 @Composable
@@ -188,7 +187,7 @@ fun BookGridScreen(
                             navigateToBookDescription()
                         },
                         onChangeBookDescription = {
-                            BookDescriptionLocation.bookInformation(bookSearch?.get(thumbnail)?.volumeInfo!!)
+                            BookDescriptionLocation.bookInformation(bookSearch?.get(thumbnail))
                         },
                         modifier = modifier
                             .padding(2.dp)
