@@ -30,8 +30,8 @@ fun LibraryScreen(
 ) {
     val libraryBookViewModel: LibraryBookViewModel? = LibraryLocation.getLibraryBookViewModel()
     val bookViewModel: BookViewModel? = SearchLocation.getBookViewModel()
-
     val bookFragment = BookFragment(libraryBookViewModel!!)
+    var libraryBookUiState = libraryBookViewModel.libraryBookUiState
 
     Scaffold () {
         it

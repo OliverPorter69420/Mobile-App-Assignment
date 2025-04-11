@@ -21,6 +21,7 @@ sealed interface LibraryBookUiState {
     data class Success(val libraryBooks: List<LibraryBooks>, val libraryBook: LibraryBooks?) : LibraryBookUiState
     object Error : LibraryBookUiState
     object Empty : LibraryBookUiState
+    object FunctionSuccess : LibraryBookUiState
 }
 
 class LibraryBookViewModel(
@@ -75,25 +76,60 @@ class LibraryBookViewModel(
         }
     }
 
-    suspend fun loadLibraryBooks() {
-        val books = libraryRepository.getLibraryBooksStream()
-        _libraryBooks.postValue(books)
+    fun loadLibraryBooks() {
+        viewModelScope.launch {
+            libraryBookUiState = try {
+                val books = libraryRepository.getLibraryBooksStream()
+                _libraryBooks.postValue(books)
+                LibraryBookUiState.FunctionSuccess
+            } catch (e: Exception) {
+                LibraryBookUiState.Error
+            }
+        }
     }
 
-    suspend fun searchLibraryBook(id: Int) {
-        val book = libraryRepository.getLibraryBookStream(id)
-        _libraryBook.postValue(book)
+    fun searchLibraryBook(id: Int) {
+        viewModelScope.launch {
+            libraryBookUiState = try {
+                val book = libraryRepository.getLibraryBookStream(id)
+                _libraryBook.postValue(book)
+                LibraryBookUiState.FunctionSuccess
+            } catch (e: Exception) {
+                LibraryBookUiState.Error
+            }
+        }
     }
 
-    suspend fun addLibraryBook(libraryBook: LibraryBooks) {
-        libraryRepository.insertLibraryBook(libraryBook)
+    fun addLibraryBook(libraryBook: LibraryBooks) {
+        viewModelScope.launch {
+            libraryBookUiState = try {
+                libraryRepository.insertLibraryBook(libraryBook)
+                LibraryBookUiState.FunctionSuccess
+            } catch (e: Exception) {
+                LibraryBookUiState.Error
+            }
+        }
     }
 
-    suspend fun deleteLibraryBook(libraryBook: LibraryBooks) {
-        libraryRepository.deleteLibraryBook(libraryBook)
+    fun deleteLibraryBook(libraryBook: LibraryBooks) {
+        viewModelScope.launch {
+            libraryBookUiState = try {
+                libraryRepository.deleteLibraryBook(libraryBook)
+                LibraryBookUiState.FunctionSuccess
+            } catch (e: Exception) {
+                LibraryBookUiState.Error
+            }
+        }
     }
 
-    suspend fun updateLibraryBook(libraryBook: LibraryBooks) {
-        libraryRepository.updateLibraryBook(libraryBook)
+    fun updateLibraryBook(libraryBook: LibraryBooks) {
+        viewModelScope.launch {
+            libraryBookUiState = try {
+                libraryRepository.updateLibraryBook(libraryBook)
+                LibraryBookUiState.FunctionSuccess
+            } catch (e: Exception) {
+                LibraryBookUiState.Error
+            }
+        }
     }
 }

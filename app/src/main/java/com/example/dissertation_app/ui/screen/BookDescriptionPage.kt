@@ -50,7 +50,6 @@ fun BookDescriptionPage(
     val bookInformation = BookDescriptionLocation.getBookInformation()
     val libraryBookViewModel: LibraryBookViewModel? = LibraryLocation.getLibraryBookViewModel()
     val icon = Icons.Filled.Bookmark
-    val scope = rememberCoroutineScope()
 
     Scaffold (
         modifier = Modifier
@@ -65,11 +64,9 @@ fun BookDescriptionPage(
                 navigateUp = backToSearch,
                 iconButtonFunctional = true,
                 buttonFunctionality = {
-                    scope.launch {
-                        val book = bookInformation.toLibraryBook()
+                    val book = bookInformation.toLibraryBook()
 
-                        libraryBookViewModel?.addLibraryBook(book)
-                    }
+                    libraryBookViewModel?.addLibraryBook(book)
                 },
                 icon = icon,
                 iconDescription = "add to library"

@@ -42,12 +42,15 @@ class BookFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         when (uiState) {
-            is LibraryBookUiState.Success -> viewModel.libraryBooks.observe(viewLifecycleOwner, Observer { books ->
-                adapter.setLibraryBooks(books)
-            })
+            is LibraryBookUiState.Success -> viewModel.libraryBooks.observe(
+                viewLifecycleOwner,
+                Observer { books ->
+                    adapter.setLibraryBooks(books)
+                })
 
             LibraryBookUiState.Empty -> "database is empty"
             LibraryBookUiState.Error -> "an error occurred"
+            LibraryBookUiState.FunctionSuccess -> "function successful"
         }
     }
 }
