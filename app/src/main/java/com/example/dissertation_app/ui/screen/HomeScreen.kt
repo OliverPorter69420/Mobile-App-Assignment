@@ -54,6 +54,7 @@ fun HomeScreen(
                 title = "Main Screen",
                 canNavigateBack = false,
                 scrollBehavior = scrollBehavior,
+                iconButtonFunctional = true,
                 buttonFunctionality = navigateToAccount,
                 icon = icon,
                 iconDescription = "account"

@@ -16,6 +16,8 @@ import com.example.dissertation_app.ui.items.BookViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dissertation_app.ui.screen.AccountLocation
 import com.example.dissertation_app.ui.screen.AccountScreen
+import com.example.dissertation_app.ui.screen.LibraryLocation
+import com.example.dissertation_app.ui.screen.LibraryScreen
 import okhttp3.internal.platform.android.AndroidSocketAdapter.Companion.factory
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,6 +50,13 @@ fun PageNavigator(
                 backToSearch = {
                     navController.navigate(SearchLocation.route)
                 }
+            )
+        }
+
+        composable(route = LibraryLocation.route) {
+            LibraryScreen(
+                navigateToHome = { navController.navigate(HomeLocation.route) },
+                navigateToBookDescription = { navController.navigate(BookDescriptionLocation.route) }
             )
         }
 

@@ -57,6 +57,7 @@ fun BookDescriptionPage(
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = backToSearch,
+                iconButtonFunctional = true,
                 buttonFunctionality = {/*TODO add in the insert library book functionality here */},
                 icon = icon,
                 iconDescription = "add to library"

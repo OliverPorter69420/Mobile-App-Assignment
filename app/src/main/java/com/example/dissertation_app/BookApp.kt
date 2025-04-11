@@ -2,6 +2,8 @@ package com.example.dissertation_app
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -15,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.dissertation_app.ui.navigation.PageNavigator
@@ -32,6 +35,7 @@ fun BookTopAppBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigateUp: () -> Unit = {},
+    iconButtonFunctional: Boolean = false,
     buttonFunctionality: () -> Unit = {},
     icon: ImageVector = Icons.AutoMirrored.Filled.ArrowBack,
     iconDescription: String = "back"
@@ -39,8 +43,21 @@ fun BookTopAppBar(
     Row (
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
+        if (canNavigateBack) {
+            IconButton(
+                onClick = navigateUp
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "back"
+                )
+            }
+        } else {
+            Spacer(Modifier.size(48.dp))
+        }
+
         CenterAlignedTopAppBar(
 
             title = {
@@ -49,24 +66,11 @@ fun BookTopAppBar(
                     style = MaterialTheme.typography.headlineSmall,
                 )
             },
-            modifier = modifier,
+            modifier = Modifier.weight(1f),
             scrollBehavior = scrollBehavior,
-
-            navigationIcon = {
-                if (canNavigateBack) {
-                    IconButton(
-                        onClick = navigateUp
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "back"
-                        )
-                    }
-                }
-            }
         )
 
-        if (buttonFunctionality != {}) {
+        if (iconButtonFunctional) {
             IconButton(
                 onClick = buttonFunctionality
             ) {
@@ -75,6 +79,8 @@ fun BookTopAppBar(
                     contentDescription = iconDescription
                 )
             }
+        } else {
+            Spacer(Modifier.size(48.dp))
         }
     }
 }
