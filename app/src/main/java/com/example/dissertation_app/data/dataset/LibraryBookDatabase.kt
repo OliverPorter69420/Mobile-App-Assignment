@@ -11,7 +11,7 @@ import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooksDao
 import com.example.dissertation_app.data.dataset.savedLibraries.SavedLibraries
 import com.example.dissertation_app.data.dataset.savedLibraries.SavedLibrariesDao
 
-@Database(entities = [LibraryBooks::class, Libraries::class, SavedLibraries::class], version = 1, exportSchema = false)
+@Database(entities = [LibraryBooks::class, Libraries::class, SavedLibraries::class], version = 2, exportSchema = false)
 abstract class LibraryBookDatabase : RoomDatabase() {
     abstract fun libraryBooksDao(): LibraryBooksDao
     abstract fun savedLibrariesDao(): SavedLibrariesDao
