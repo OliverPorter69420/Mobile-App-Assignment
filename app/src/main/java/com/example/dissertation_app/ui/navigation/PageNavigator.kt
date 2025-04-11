@@ -34,6 +34,7 @@ fun PageNavigator(
         composable(route = HomeLocation.route) {
             HomeScreen(
                 navigateToSearch = { navController.navigate(SearchLocation.route) },
+                navigateToLibrary = { navController.navigate(LibraryLocation.route) },
                 navigateToAccount = { navController.navigate(AccountLocation.route) }
             )
         }

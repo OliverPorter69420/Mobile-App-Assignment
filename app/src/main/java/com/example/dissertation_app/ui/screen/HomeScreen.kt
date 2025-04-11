@@ -36,6 +36,7 @@ object HomeLocation : NavigationDestination {
 @Composable
 fun HomeScreen(
     navigateToSearch: () -> Unit,
+    navigateToLibrary: () -> Unit,
     navigateToAccount: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -72,6 +73,18 @@ fun HomeScreen(
                 onClick = navigateToSearch
             ) {
                 Text(text = "Search Screen")
+            }
+
+            Button(
+                onClick = navigateToLibrary
+            ) {
+                Text(text = "Library Screen")
+            }
+
+            Button(
+                onClick = navigateToAccount
+            ) {
+                Text(text = "Account Screen")
             }
         }
     }
