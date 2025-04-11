@@ -5,8 +5,7 @@ import com.example.dissertation_app.data.api.BookRepository
 import com.example.dissertation_app.data.api.NetworkBookRepository
 import com.example.dissertation_app.data.api.RateLimitInterceptor
 import com.example.dissertation_app.data.dataset.LibraryBookDatabase
-import com.example.dissertation_app.data.dataset.LibraryBooksRepository
-import com.example.dissertation_app.data.dataset.LocalLibraryRepository
+import com.example.dissertation_app.data.dataset.libraryBook.LocalLibraryBookRepository
 import com.example.dissertation_app.network.BookApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -18,7 +17,7 @@ import java.io.File
 interface AppContainer {
     val bookRepository: BookRepository
 
-    val libraryBookRepository : LocalLibraryRepository
+    val libraryBookRepository : LocalLibraryBookRepository
 }
 
 class DefaultAppContainer(
@@ -52,8 +51,8 @@ class DefaultAppContainer(
         NetworkBookRepository(retrofitService)
     }
 
-    override val libraryBookRepository: LocalLibraryRepository by lazy {
-        LocalLibraryRepository(
+    override val libraryBookRepository: LocalLibraryBookRepository by lazy {
+        LocalLibraryBookRepository(
             LibraryBookDatabase.getDatabase(context).libraryBooksDao()
         )
     }

@@ -13,12 +13,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.dissertation_app.BookApplication
-import com.example.dissertation_app.data.dataset.LibraryBooks
-import com.example.dissertation_app.data.dataset.LocalLibraryRepository
+import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
+import com.example.dissertation_app.data.dataset.libraryBook.LocalLibraryBookRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 
 sealed interface LibraryBookUiState {
     data class Success(val libraryBooks: List<LibraryBooks>, val libraryBook: LibraryBooks?) : LibraryBookUiState
@@ -28,7 +26,7 @@ sealed interface LibraryBookUiState {
 }
 
 class LibraryBookViewModel(
-    private val libraryRepository: LocalLibraryRepository
+    private val libraryRepository: LocalLibraryBookRepository
 ) : ViewModel() {
 
     var libraryBookUiState: LibraryBookUiState by mutableStateOf(LibraryBookUiState.Empty)

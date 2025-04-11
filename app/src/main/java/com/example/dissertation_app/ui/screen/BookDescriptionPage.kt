@@ -14,19 +14,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
-import com.example.dissertation_app.data.dataset.LibraryBooks
+import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
 import com.example.dissertation_app.model.BookObjects
-import com.example.dissertation_app.model.VolumeInfo
 import com.example.dissertation_app.ui.items.LibraryBookViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
-import kotlinx.coroutines.launch
 
 object BookDescriptionLocation : NavigationDestination {
     override val route = "bookDescription"

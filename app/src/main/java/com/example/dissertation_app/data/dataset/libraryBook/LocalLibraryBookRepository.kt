@@ -1,8 +1,6 @@
-package com.example.dissertation_app.data.dataset
+package com.example.dissertation_app.data.dataset.libraryBook
 
-import kotlinx.coroutines.flow.Flow
-
-class LocalLibraryRepository(private val libraryBooksDao: LibraryBooksDao) : LibraryBooksRepository {
+class LocalLibraryBookRepository(private val libraryBooksDao: LibraryBooksDao) : LibraryBooksRepository {
     override fun getLibraryBooksStream(): List<LibraryBooks> = libraryBooksDao.getAllLibraryBooks()
 
     override fun getLibraryBookStream(id: Int): LibraryBooks? = libraryBooksDao.getLibraryBookById(id)

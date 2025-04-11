@@ -1,4 +1,4 @@
-package com.example.dissertation_app.data.dataset
+package com.example.dissertation_app.data.dataset.libraryBook
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

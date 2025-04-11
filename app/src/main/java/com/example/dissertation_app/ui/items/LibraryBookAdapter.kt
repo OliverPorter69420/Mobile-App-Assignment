@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dissertation_app.R
-import com.example.dissertation_app.data.dataset.LibraryBooks
+import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
 
 class LibraryBookAdapter (
     private val context: Context,
