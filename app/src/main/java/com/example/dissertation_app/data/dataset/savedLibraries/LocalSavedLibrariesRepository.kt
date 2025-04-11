@@ -4,7 +4,7 @@ import com.example.dissertation_app.data.dataset.library.Libraries
 import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
 
 class LocalSavedLibrariesRepository(private val savedLibrariesDao: SavedLibrariesDao) : SavedLibrariesRepository {
-    override fun getLibrariesInSavedLibrary(libraryId: Int): List<Libraries> = savedLibrariesDao.getLibrariesInSavedLibrary(libraryId)
+    override fun getLibrariesInSavedLibrary(): List<Libraries> = savedLibrariesDao.getLibrariesInSavedLibrary()
 
     override fun getBookInSavedLibrary(libraryId: Int): List<LibraryBooks> = savedLibrariesDao.getBooksInLibrary(libraryId)
 
