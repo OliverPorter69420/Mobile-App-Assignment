@@ -39,6 +39,9 @@ import coil.transform.Transformation
 import com.example.dissertation_app.R
 import com.example.dissertation_app.model.BookObjects
 import com.example.dissertation_app.ui.screen.BookDescriptionLocation
+import com.example.dissertation_app.ui.screen.FragmentActivity
+import com.example.dissertation_app.ui.screen.MainContentFragment
+import com.example.dissertation_app.ui.screen.SearchLocation
 
 
 @Composable
@@ -157,6 +160,13 @@ fun BookGridScreen(
     navigateToBookDescription: () -> Unit,
     modifier: Modifier,
 ) {
+    val fragmentActivity = FragmentActivity
+    val viewModel = SearchLocation.getBookViewModel()
+
+    if (viewModel != null) {
+        fragmentActivity.showChildFragment(BookGridFragment(viewModel))
+    }
+
     var selectedBookID: String? by remember { mutableStateOf<String?>(null) }
 
     if (selectedBookID == null) {
