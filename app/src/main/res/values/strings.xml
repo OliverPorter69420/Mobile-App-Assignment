@@ -10,4 +10,5 @@
     <string name="library_screen">library screen\n</string>
     <string name="account_screen">account page\n</string>
     <string name="book_thumbnail">book_thumbnail\n</string>
+    <string name="main_content_area">Main Content Area</string>
 </resources>
