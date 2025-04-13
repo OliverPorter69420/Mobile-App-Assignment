@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dissertation_app.R
 
-class BookFragment(
+class LibraryBookFragment(
     private var viewModel: LibraryBookViewModel
 ) : Fragment(){
     private lateinit var recyclerView: RecyclerView
