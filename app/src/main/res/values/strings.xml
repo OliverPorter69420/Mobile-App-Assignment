@@ -11,4 +11,6 @@
     <string name="account_screen">account page\n</string>
     <string name="book_thumbnail">book_thumbnail\n</string>
     <string name="main_content_area">Main Content Area</string>
+    <string name="navigate_up">navagate back\n</string>
+    <string name="title">Main Content Area</string>
 </resources>
