@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dissertation_app.R
 
-class BookGridActivity (
+class BookGridFragment (
     private val viewModel: BookViewModel
 ) : Fragment() {
     private lateinit var recyclerView: RecyclerView
