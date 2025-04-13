@@ -9,9 +9,12 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.dissertation_app.data.api.BookRepository
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import coil.network.HttpException
 import com.example.dissertation_app.BookApplication
+import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
 import com.example.dissertation_app.model.BookObjects
 import com.example.dissertation_app.model.BookResponse
 import kotlinx.coroutines.launch
@@ -28,6 +31,12 @@ sealed interface BookUiState {
 class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
     var bookUiState: BookUiState by mutableStateOf(BookUiState.Start)
         private set
+
+    private val _libraryBooks = MutableLiveData<List<BookObjects>>()
+    val libraryBooks: LiveData<List<BookObjects>> = _libraryBooks
+
+    private val _thumbnailUrls = MutableLiveData<List<String>>()
+    val thumbnailUrls: LiveData<List<String>> = _thumbnailUrls
 
     var searchTerm: String = ""
 
@@ -54,7 +63,12 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
                         BookUiState.Error
                     } else {
 
-                        var thumbnails = getItems(response.items)
+                        var thumbnails = getThumbnails(response.items)
+
+                        if (response.items?.isEmpty() == false) {
+                            _libraryBooks.postValue(response.items)
+                            _thumbnailUrls.postValue(thumbnails)
+                        }
 
                         BookUiState.Success(response.items, thumbnails)
                     }
@@ -92,7 +106,7 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
         bookUiState = BookUiState.Start
     }
 
-    private suspend fun getItems(
+    private suspend fun getThumbnails(
         books: List<BookObjects>?
     ): MutableList<String> {
         var thumbnails: MutableList<String> = mutableListOf()

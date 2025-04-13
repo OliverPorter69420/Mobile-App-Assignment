@@ -11,64 +11,49 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.dissertation_app.R
 import com.example.dissertation_app.model.BookObjects
+import com.example.dissertation_app.ui.items.BookGridAdapter.BookViewHolder
 import com.example.dissertation_app.ui.screen.BookDescriptionLocation
 
-class BookGridAdapter(private val bookUiState: BookUiState) :
-    ListAdapter<String, BookGridAdapter.BookViewHolder>(DiffCallback) {
+class BookGridAdapter(
+    private val bookUiState: BookUiState,
+    private var books: List<BookObjects>,
+    private var thumbnailUrls: List<String>
+) : ListAdapter<String, BookViewHolder>(DiffCallback) {
 
-    class BookViewHolder(itemView: View, private val bookUiState: BookUiState) :
+    inner class BookViewHolder(itemView: View, private val bookUiState: BookUiState) :
         RecyclerView.ViewHolder(itemView) {
         private val bookImageView: ImageView = itemView.findViewById(R.id.bookImageView)
         private val textTitleView: TextView = itemView.findViewById(R.id.bookTitleTextView)
 
         fun bind(bookPosition: Int) {
-            val bookDetails = extractBook(bookPosition)
-            val thumbnailUrl = extractThumbnailUrl(bookPosition)
-            itemView.setOnClickListener { BookDescriptionLocation.bookInformation(bookDetails) }
+            when (bookUiState) {
+                is BookUiState.Success -> {
+                    itemView.setOnClickListener { BookDescriptionLocation.bookInformation(books[bookPosition]) }
 
-            bookImageView.load(thumbnailUrl) {
-                when (bookUiState) {
-                    is BookUiState.Success -> {
+                    bookImageView.load(thumbnailUrls[bookPosition]) {
                         crossfade(true)
-                    }
-
-                    is BookUiState.Start -> {
                         placeholder(R.drawable.loading_img)
-                    }
-
-                    is BookUiState.Empty -> {
-                        placeholder(R.drawable.loading_img)
-                    }
-
-                    is BookUiState.Loading -> {
-                        placeholder(R.drawable.loading_img)
-                    }
-
-                    is BookUiState.Error -> {
                         error(R.drawable.ic_broken_image)
                     }
+
+                    textTitleView.text = books[bookPosition].volumeInfo?.title.toString()
+                }
+
+                BookUiState.Empty -> {
+                    textTitleView.text = "No books found"
+                }
+                BookUiState.Error -> {
+                    textTitleView.text = "Error loading books"
+                }
+
+                BookUiState.Loading -> {
+                    textTitleView.text = "Images are loading"
+                }
+                BookUiState.Start -> {
+                    textTitleView.text = ""
                 }
             }
-
-            textTitleView.text = bookDetails?.volumeInfo?.title.toString()
         }
-
-        private fun extractThumbnailUrl(bookPosition: Int) : String{
-            return if (bookUiState is BookUiState.Success) {
-                bookUiState.thumbnails[bookPosition]
-            } else {
-                ""
-            }
-        }
-
-        private fun extractBook(bookPosition: Int): BookObjects? {
-            return if (bookUiState is BookUiState.Success) {
-                bookUiState.bookSearch?.get(bookPosition)
-            } else {
-                null
-            }
-        }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
@@ -79,6 +64,18 @@ class BookGridAdapter(private val bookUiState: BookUiState) :
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         holder.bind(position)
+    }
+
+    override fun getItemCount(): Int {
+        return this.books.size
+    }
+
+    fun setLibraryBooks(books : List<BookObjects>) {
+        this.books = books
+    }
+
+    fun setThumbnailUrls(thumbnailUrls : List<String>) {
+        this.thumbnailUrls = thumbnailUrls
     }
 
     companion object {

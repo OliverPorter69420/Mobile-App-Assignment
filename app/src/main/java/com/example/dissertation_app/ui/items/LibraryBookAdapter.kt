@@ -1,41 +1,87 @@
 package com.example.dissertation_app.ui.items
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil.ItemCallback
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Adapter
+import coil.load
 import com.example.dissertation_app.R
 import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
+import com.example.dissertation_app.ui.items.LibraryBookAdapter.LibraryViewHolder
+import com.example.dissertation_app.ui.screen.BookDescriptionLocation
 
 class LibraryBookAdapter (
-    private val context: Context,
-    private var libraryBooks: List<LibraryBooks>?
-) : RecyclerView.Adapter<LibraryBookAdapter.ViewHolder>(){
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_library_book, parent, false)
-        return ViewHolder(view)
+    private var uiState: LibraryBookUiState,
+    private var libraryBooks: List<LibraryBooks>
+) : ListAdapter<String, LibraryViewHolder>(DiffCallback){
+
+    inner class LibraryViewHolder(itemView: View, private val uiState: LibraryBookUiState) :
+        RecyclerView.ViewHolder(itemView) {
+
+        private val titleTextView = itemView.findViewById<TextView>(R.id.titleTextView)
+        private val authorTextView = itemView.findViewById<TextView>(R.id.authorTextView)
+        private val descriptionTextView = itemView.findViewById<TextView>(R.id.editTextText)
+        private val thumbnailImage = itemView.findViewById<ImageView>(R.id.bookImageView)
+
+        @SuppressLint("SetTextI18n")
+        fun bind(position: Int) {
+            itemView.setOnClickListener {
+                /*todo add the on click listener*/
+            }
+
+            when(uiState) {
+                is LibraryBookUiState.Success -> {
+                    titleTextView.text = libraryBooks[position].title
+                    authorTextView.text = libraryBooks[position].author
+                    descriptionTextView.text = libraryBooks[position].description
+                    thumbnailImage.load(libraryBooks[position].imageUrl) {
+                        crossfade(true)
+                        placeholder(R.drawable.loading_img)
+                        error(R.drawable.ic_broken_image)
+                    }
+                }
+
+                LibraryBookUiState.Empty -> titleTextView.text = "No books in library"
+                LibraryBookUiState.Error -> titleTextView.text = "Error loading books"
+                LibraryBookUiState.FunctionSuccess -> titleTextView.text = "Function Success"
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val libraryBook = libraryBooks?.get(position)
-        holder.bind(libraryBook)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LibraryViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_library_book, parent, false)
+        return LibraryViewHolder(view, uiState)
+    }
+
+    override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
+        holder.bind(position)
     }
 
     override fun getItemCount(): Int {
-        return libraryBooks?.size ?: 0
+        return this.libraryBooks.size
     }
 
-    fun setLibraryBooks(libraryBooks: List<LibraryBooks>?) {
-        this.libraryBooks = libraryBooks
+    fun setLibraryBooks(books : List<LibraryBooks>) {
+        this.libraryBooks = books
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(libraryBooks: LibraryBooks?) {
-            itemView.findViewById<TextView>(R.id.titleTextView).text = libraryBooks?.title
-            itemView.findViewById<TextView>(R.id.authorTextView).text = libraryBooks?.author
-            itemView.findViewById<TextView>(R.id.editTextText).text = libraryBooks?.description
+    companion object {
+        private val DiffCallback = object : ItemCallback<String>() {
+            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }
