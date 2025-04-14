@@ -40,6 +40,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -49,6 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -113,10 +115,15 @@ fun LibraryScreen(
     val savedLibraryViewModel: SavedLibraryViewModel? = LibraryLocation.getSavedLibraryViewModel()
     val libraryViewModel : LibraryViewModel? = LibraryLocation.getLibraryViewModel()
     val bookViewModel: BookViewModel? = SearchLocation.getBookViewModel()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     var showCreateLibrary by remember { mutableStateOf(false) }
 
+    libraryViewModel?.getLibraries()
+
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+
         topBar = {
             BookTopAppBar(
                 title = "Library Screen",
@@ -141,7 +148,9 @@ fun LibraryScreen(
                     },
                     exitFunction = {
                         showCreateLibrary = false
-                    }
+                    },
+
+                    reloadFunction = libraryViewModel!!::getLibraries
                 )
             }
 
@@ -165,7 +174,9 @@ fun LibraryScreen(
         },
     ) {
         Column(
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(it),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CreateLibraryGrid(
                 librariesUiStates = libraryViewModel?.libraryUiState,
@@ -175,7 +186,9 @@ fun LibraryScreen(
 }
 
 @Composable
-private fun CreateLibraryGrid(librariesUiStates: LibraryUiState?) {
+private fun CreateLibraryGrid(
+    librariesUiStates: LibraryUiState?
+) {
     when (librariesUiStates) {
         is LibraryUiState.Success -> {
             LazyHorizontalGrid(
@@ -305,7 +318,8 @@ fun AddNewLibraries(
 fun CreateLibrary(
     modifier: Modifier = Modifier,
     createFunction: (String) -> Unit = {},
-    exitFunction: () -> Unit = {}
+    exitFunction: () -> Unit = {},
+    reloadFunction: () -> Unit
 ) {
     var textValue by remember { mutableStateOf("") }
     Box(
@@ -356,6 +370,8 @@ fun CreateLibrary(
         IconButton(
             onClick = {
                 createFunction(textValue)
+                reloadFunction()
+                textValue = ""
                 exitFunction()
             },
             modifier = Modifier
@@ -377,7 +393,11 @@ fun CreateLibrary(
 @Preview
 @Composable
 fun CreateLibraryPreview() {
-    CreateLibrary()
+    CreateLibrary(
+        createFunction = {},
+        exitFunction = {},
+        reloadFunction = {}
+    )
 }
 
 @Preview
