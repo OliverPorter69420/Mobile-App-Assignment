@@ -28,6 +28,7 @@ import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.ui.items.BookViewModel
 import com.example.dissertation_app.ui.items.LibraryBookViewModel
+import com.example.dissertation_app.ui.items.SavedLibraryViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
 
 object HomeLocation : NavigationDestination {
@@ -48,6 +49,9 @@ fun HomeScreen(
 
     val libraryBookViewModel: LibraryBookViewModel? = viewModel(factory = LibraryBookViewModel.Factory)
     LibraryLocation.libraryBookViewModel(libraryBookViewModel)
+
+    val savedLibraryViewModel : SavedLibraryViewModel? = viewModel(factory = SavedLibraryViewModel.Factory)
+    LibraryLocation.savedLibraryViewModel(savedLibraryViewModel)
 
     val icon = Icons.Filled.Person
 

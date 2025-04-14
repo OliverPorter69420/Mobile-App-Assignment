@@ -44,12 +44,14 @@ import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.ui.items.BookViewModel
 import com.example.dissertation_app.ui.items.LibraryBookViewModel
+import com.example.dissertation_app.ui.items.SavedLibraryViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
 
 object LibraryLocation : NavigationDestination {
     override val route = "library"
     override val titleRes = R.string.library_screen
     private var libraryBookViewModel: LibraryBookViewModel? = null
+    private var savedLibraryViewModel: SavedLibraryViewModel? = null
 
     fun getLibraryBookViewModel(): LibraryBookViewModel? {
         return libraryBookViewModel
@@ -57,6 +59,14 @@ object LibraryLocation : NavigationDestination {
 
     fun libraryBookViewModel(viewModel: LibraryBookViewModel?) {
         libraryBookViewModel = viewModel
+    }
+
+    fun getSavedLibraryViewModel(): SavedLibraryViewModel? {
+        return savedLibraryViewModel
+    }
+
+    fun savedLibraryViewModel(viewModel: SavedLibraryViewModel?) {
+        savedLibraryViewModel = viewModel
     }
 }
 
