@@ -42,7 +42,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
-import com.example.dissertation_app.ui.items.LibraryBookFragment
 import com.example.dissertation_app.ui.items.BookViewModel
 import com.example.dissertation_app.ui.items.LibraryBookViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
@@ -69,7 +68,6 @@ fun LibraryScreen(
 ) {
     val libraryBookViewModel: LibraryBookViewModel? = LibraryLocation.getLibraryBookViewModel()
     val bookViewModel: BookViewModel? = SearchLocation.getBookViewModel()
-    val bookFragment = LibraryBookFragment(libraryBookViewModel!!)
 
     var showCreateLibrary by remember { mutableStateOf(false) }
     var currentLibraryName by remember { mutableStateOf("") }

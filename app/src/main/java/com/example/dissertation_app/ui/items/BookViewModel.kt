@@ -32,12 +32,6 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
     var bookUiState: BookUiState by mutableStateOf(BookUiState.Start)
         private set
 
-    private val _libraryBooks = MutableLiveData<List<BookObjects>>()
-    val libraryBooks: LiveData<List<BookObjects>> = _libraryBooks
-
-    private val _thumbnailUrls = MutableLiveData<List<String>>()
-    val thumbnailUrls: LiveData<List<String>> = _thumbnailUrls
-
     var searchTerm: String = ""
 
     companion object {
@@ -64,11 +58,6 @@ class BookViewModel(private val bookRepository: BookRepository) : ViewModel() {
                     } else {
 
                         var thumbnails = getThumbnails(response.items)
-
-                        if (response.items?.isEmpty() == false) {
-                            _libraryBooks.postValue(response.items)
-                            _thumbnailUrls.postValue(thumbnails)
-                        }
 
                         BookUiState.Success(response.items, thumbnails)
                     }
