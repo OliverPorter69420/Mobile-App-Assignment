@@ -35,7 +35,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.scale
+import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.FragmentManager
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.disk.DiskCache
@@ -49,7 +52,6 @@ import com.example.dissertation_app.ui.screen.BookDescriptionLocation
 import com.example.dissertation_app.ui.screen.FragmentActivity
 import com.example.dissertation_app.ui.screen.MainContentFragment
 import com.example.dissertation_app.ui.screen.SearchLocation
-
 
 @Composable
 fun BookMenu(
@@ -65,11 +67,10 @@ fun BookMenu(
         is BookUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
 
         is BookUiState.Success -> BookGridScreen(
-            bookUiState.bookSearch,
-            bookUiState.thumbnails,
-            resetAction = resetAction,
-            navigateToBookDescription = navigateToBookDescription,
-            modifier = modifier
+            viewModel = SearchLocation.getBookViewModel(),
+            fragmentManager = FragmentActivity.getFunctionManager(),
+            modifier = modifier,
+            onFragmentCreated = {}
         )
 
         is BookUiState.Empty -> EmptyScreen(modifier = modifier)
@@ -178,6 +179,32 @@ fun EmptyScreen(modifier: Modifier) {
     ) {
         Text(text = "No results, search for something else")
     }
+}
+
+@Composable
+fun BookGridScreen(
+    viewModel: BookViewModel?,
+    modifier: Modifier = Modifier,
+    fragmentManager: FragmentManager,
+    onFragmentCreated: () -> Unit = {},
+) {
+    AndroidView(
+        factory = { context ->
+            FragmentContainerView(context).apply {
+                id = R.id.child_fragment_container
+            }
+        },
+        modifier = modifier,
+        update = { view ->
+
+            if(view.getFragment<BookGridFragment?>() == null && viewModel != null) {
+                fragmentManager.beginTransaction()
+                    .replace(R.id.child_fragment_container, BookGridFragment(viewModel))
+                    .commitNow()
+                onFragmentCreated()
+            }
+        }
+    )
 }
 
 @Composable

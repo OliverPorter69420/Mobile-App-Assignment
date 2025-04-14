@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.example.dissertation_app.R
 import com.example.dissertation_app.databinding.FragmentMainContentLayoutBinding
 
@@ -14,6 +15,10 @@ object FragmentActivity : AppCompatActivity() {
 
     fun showChildFragment(fragment: Fragment) {
         mainContentFragment?.showChildFragment(fragment)
+    }
+
+    fun getFunctionManager(): FragmentManager {
+        return supportFragmentManager
     }
 }
 
