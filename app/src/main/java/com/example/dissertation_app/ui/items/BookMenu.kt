@@ -1,6 +1,8 @@
 package com.example.dissertation_app.ui.items
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,9 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Replay
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.scale
 import coil.ImageLoader
@@ -73,7 +80,7 @@ fun BookMenu(
             modifier = modifier
         )
 
-        else -> ErrorScreen(retryAction = getBooks)
+        else -> ErrorScreen(retryAction = getBooks, modifier = Modifier)
     }
 }
 
@@ -139,15 +146,36 @@ fun LoadingScreen(modifier: Modifier) {
 }
 
 @Composable
-fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
-    Column {
-        Text(text = "error")
+fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier) {
+    Column(
+        modifier = modifier.padding(10.dp)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_connection_error),
+            contentDescription = "connection error"
+        )
+
+        Text(text = "error! please try again")
+
+        IconButton(
+            onClick = retryAction
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Replay,
+                contentDescription = "refresh"
+            )
+        }
     }
 }
 
 @Composable
 fun EmptyScreen(modifier: Modifier) {
-    Column {
+    Column(
+        modifier = modifier,
+    ) {
         Text(text = "No results, search for something else")
     }
 }
@@ -281,4 +309,13 @@ class CustomScaleTransformation(private val targetWidth: Int, private val target
     override suspend fun transform(input: Bitmap, size: Size): Bitmap {
         return input.scale(targetWidth, targetHeight)
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ErrorScreenPreview() {
+    ErrorScreen(
+        retryAction = {},
+        modifier = Modifier
+    )
 }
