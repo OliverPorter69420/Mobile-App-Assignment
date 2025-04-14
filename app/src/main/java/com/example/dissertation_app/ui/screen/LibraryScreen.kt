@@ -74,7 +74,7 @@ object LibraryLocation : NavigationDestination {
         selectLibraryIndex = id
     }
 
-    fun getSelectLibraryIndex(): Int {
+    fun viewCurrentLibraryIndex(): Int {
         return selectLibraryIndex
     }
 
@@ -286,7 +286,7 @@ fun AddNewLibraries(
 
         IconButton(
             onClick = {
-                val libraryId = LibraryLocation.getSelectLibraryIndex()
+                val libraryId = LibraryLocation.viewCurrentLibraryIndex()
                 removeButtonFunction(libraryId)
             },
             modifier = Modifier.padding(10.dp)
