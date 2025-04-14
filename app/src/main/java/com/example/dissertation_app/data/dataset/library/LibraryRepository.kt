@@ -7,7 +7,7 @@ interface LibraryRepository {
 
     suspend fun insertLibrary(library: Libraries)
 
-    suspend fun deleteLibrary(library: Libraries)
+    suspend fun deleteLibrary(id: Int)
 
     suspend fun updateLibrary(library: Libraries)
 }

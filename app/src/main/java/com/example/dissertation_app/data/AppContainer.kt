@@ -23,7 +23,7 @@ interface AppContainer {
 
     val libraryRepository : LocalLibraryRepository
 
-    val SavedLibrariesRepository : LocalSavedLibrariesRepository
+    val savedLibrariesRepository : LocalSavedLibrariesRepository
 }
 
 class DefaultAppContainer(
@@ -69,7 +69,7 @@ class DefaultAppContainer(
         )
     }
 
-    override val SavedLibrariesRepository: LocalSavedLibrariesRepository by lazy {
+    override val savedLibrariesRepository: LocalSavedLibrariesRepository by lazy {
         LocalSavedLibrariesRepository(
             LibraryBookDatabase.getDatabase(context).savedLibrariesDao()
         )

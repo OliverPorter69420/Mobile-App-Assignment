@@ -21,6 +21,6 @@ interface LibrariesDao {
     @Update
     fun updateLibrary(library: Libraries)
 
-    @Delete
-    fun deleteLibrary(library: Libraries)
+    @Query("DELETE FROM libraries WHERE id = :id")
+    fun deleteLibrary(id: Int)
 }

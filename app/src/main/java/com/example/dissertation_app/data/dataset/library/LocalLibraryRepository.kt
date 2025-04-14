@@ -7,7 +7,7 @@ class LocalLibraryRepository(private val librariesDao: LibrariesDao) : LibraryRe
 
     override suspend fun insertLibrary(library: Libraries) = librariesDao.insertLibrary(library)
 
-    override suspend fun deleteLibrary(library: Libraries) = librariesDao.deleteLibrary(library)
+    override suspend fun deleteLibrary(id: Int) = librariesDao.deleteLibrary(id)
 
     override suspend fun updateLibrary(library: Libraries) = librariesDao.updateLibrary(library)
 }

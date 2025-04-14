@@ -6,52 +6,77 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.PressGestureScope
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells.Fixed
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.LibraryBooks
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CloudDownload
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.LibraryBooks
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
+import com.example.dissertation_app.data.dataset.library.Libraries
 import com.example.dissertation_app.ui.items.BookViewModel
 import com.example.dissertation_app.ui.items.LibraryBookViewModel
+import com.example.dissertation_app.ui.items.LibraryUiState
+import com.example.dissertation_app.ui.items.LibraryViewModel
 import com.example.dissertation_app.ui.items.SavedLibraryViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
 
 object LibraryLocation : NavigationDestination {
     override val route = "library"
     override val titleRes = R.string.library_screen
+    private var selectLibraryIndex: Int by mutableIntStateOf(-1)
     private var libraryBookViewModel: LibraryBookViewModel? = null
     private var savedLibraryViewModel: SavedLibraryViewModel? = null
+    private var libraryViewModel: LibraryViewModel? = null
+
+    fun selectLibraryIndex(id:Int) {
+        selectLibraryIndex = id
+    }
+
+    fun getSelectLibraryIndex(): Int {
+        return selectLibraryIndex
+    }
 
     fun getLibraryBookViewModel(): LibraryBookViewModel? {
         return libraryBookViewModel
@@ -68,6 +93,14 @@ object LibraryLocation : NavigationDestination {
     fun savedLibraryViewModel(viewModel: SavedLibraryViewModel?) {
         savedLibraryViewModel = viewModel
     }
+
+    fun getLibraryViewModel(): LibraryViewModel? {
+        return libraryViewModel
+    }
+
+    fun libraryViewModel(viewModel: LibraryViewModel?) {
+        libraryViewModel = viewModel
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,10 +110,11 @@ fun LibraryScreen(
     navigateToHome: () -> Unit,
 ) {
     val libraryBookViewModel: LibraryBookViewModel? = LibraryLocation.getLibraryBookViewModel()
+    val savedLibraryViewModel: SavedLibraryViewModel? = LibraryLocation.getSavedLibraryViewModel()
+    val libraryViewModel : LibraryViewModel? = LibraryLocation.getLibraryViewModel()
     val bookViewModel: BookViewModel? = SearchLocation.getBookViewModel()
 
     var showCreateLibrary by remember { mutableStateOf(false) }
-    var currentLibraryName by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -101,7 +135,9 @@ fun LibraryScreen(
             ) {
                 CreateLibrary(
                     createFunction = {
-                        currentLibraryName = it
+                        libraryViewModel?.addLibrary(
+                            Libraries(libraryName = it)
+                        )
                     },
                     exitFunction = {
                         showCreateLibrary = false
@@ -118,7 +154,11 @@ fun LibraryScreen(
                     circularButtonFunction = {
                         showCreateLibrary = true
                     },
-                    removeButtonFunction = {},
+                    removeButtonFunction = {
+                        libraryViewModel?.removeLibrary(
+                            libraryId = it
+                        )
+                    },
                     uploadingButtonFunction = {}
                 )
             }
@@ -127,9 +167,76 @@ fun LibraryScreen(
         Column(
             modifier = Modifier.padding(it)
         ) {
-            if (currentLibraryName != "") {
-                Text(text = currentLibraryName)
+            CreateLibraryGrid(
+                librariesUiStates = libraryViewModel?.libraryUiState,
+            )
+        }
+    }
+}
+
+@Composable
+private fun CreateLibraryGrid(librariesUiStates: LibraryUiState?) {
+    when (librariesUiStates) {
+        is LibraryUiState.Success -> {
+            LazyHorizontalGrid(
+                rows = Fixed(2),
+                modifier = Modifier.padding(10.dp)
+            ) {
+                librariesUiStates.libraries?.forEach {
+                    item {
+                        CreateLibraryCard(
+                            library = it,
+                            navigateToBookDescription = {}
+                        )
+                    }
+                }
             }
+        }
+        is LibraryUiState.Loading -> Text(text = "Loading")
+        is LibraryUiState.Error -> Text(text = "Error")
+        null -> Text(text = "null")
+    }
+}
+
+@Composable
+fun CreateLibraryCard(
+    library: Libraries,
+    navigateToBookDescription: () -> Unit
+) {
+    var isPressed by remember { mutableStateOf(false) }
+
+    Surface(
+        modifier = Modifier.padding(10.dp)
+            .background(
+                if (isPressed) {
+                    Color.Blue
+                } else {
+                    Color.Gray
+                })
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        if (!isPressed) {
+                            navigateToBookDescription()
+                        }
+                    },
+
+                    onPress = {
+                        isPressed = true
+                        tryAwaitRelease()
+                        LibraryLocation.selectLibraryIndex(id = library.id)
+                        isPressed = false
+                    }
+                )
+            }
+    ) {
+        Card(modifier = Modifier) {
+            Image(
+                imageVector = Icons.AutoMirrored.Filled.LibraryBooks,
+                contentDescription = "library image"
+            )
+
+            Text(text = library.libraryName)
         }
     }
 }
@@ -139,7 +246,7 @@ fun LibraryScreen(
 fun AddNewLibraries(
     modifier: Modifier = Modifier,
     circularButtonFunction: () -> Unit,
-    removeButtonFunction: () -> Unit,
+    removeButtonFunction: (Int) -> Unit,
     uploadingButtonFunction: () -> Unit,
 ) {
     Row(
@@ -176,7 +283,10 @@ fun AddNewLibraries(
         }
 
         IconButton(
-            onClick = removeButtonFunction,
+            onClick = {
+                val libraryId = LibraryLocation.getSelectLibraryIndex()
+                removeButtonFunction(libraryId)
+            },
             modifier = Modifier.padding(10.dp)
         ) {
             Icon(

@@ -34,7 +34,7 @@ class SavedLibraryViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as BookApplication)
-                val savedLibrariesRepository = application.container.SavedLibrariesRepository
+                val savedLibrariesRepository = application.container.savedLibrariesRepository
                 SavedLibraryViewModel(savedLibrariesRepository = savedLibrariesRepository)
             }
         }
