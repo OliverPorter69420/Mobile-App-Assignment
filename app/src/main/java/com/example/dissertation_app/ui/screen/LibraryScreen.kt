@@ -2,6 +2,7 @@ package com.example.dissertation_app.ui.screen
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -24,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells.Fixed
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.LibraryBooks
 import androidx.compose.material.icons.filled.Add
@@ -33,6 +35,7 @@ import androidx.compose.material.icons.filled.CloudDownload
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.LibraryBooks
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -169,7 +172,8 @@ fun LibraryScreen(
                             libraryId = it
                         )
                     },
-                    uploadingButtonFunction = {}
+                    uploadingButtonFunction = {},
+                    reloadFunction = libraryViewModel!!::getLibraries
                 )
             }
         },
@@ -198,7 +202,7 @@ private fun CreateLibraryGrid(
             ) {
                 items(
                     count = librariesUiStates.libraries?.size ?: 0,
-                    key = { libraryId -> librariesUiStates.libraries?.get(libraryId)!! },
+                    key = { libraryId -> librariesUiStates.libraries?.get(libraryId)?.id!! },
                 ) { libraryId ->
                     CreateLibraryCard(
                         library = librariesUiStates.libraries?.get(libraryId)!! ,
@@ -221,37 +225,47 @@ fun CreateLibraryCard(
     navigateToBookDescription: () -> Unit
 ) {
     var isPressed by remember { mutableStateOf(false) }
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isPressed) Color.Cyan else Color.LightGray,
+        label = "Background Color Animation"
+    )
 
     Surface(
         modifier = Modifier
             .padding(10.dp)
-            .background(
-                if (isPressed) {
-                    Color.Blue
-                } else {
-                    Color.Gray
-                }
-            )
+
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
                         if (!isPressed) {
+                            Log.d("isPressed", "$isPressed")
+
                             navigateToBookDescription()
                         }
                     },
 
                     onPress = {
-                        isPressed = true
-                        tryAwaitRelease()
-                        LibraryLocation.selectLibraryIndex(id = library.id)
-                        isPressed = false
+                        try {
+                            isPressed = true
+                            tryAwaitRelease()
+                        } finally {
+                            isPressed = false
+                        }
                     }
                 )
-
-                Log.d("isPressed", "$isPressed")
-            }
+            },
+        shape = RoundedCornerShape(8.dp),
+        shadowElevation = 4.dp
     ) {
-        Card(modifier = Modifier) {
+        Card(
+            modifier = Modifier.size(100.dp),
+            colors = CardColors(
+                containerColor = backgroundColor,
+                contentColor = Color.Black,
+                disabledContainerColor = Color.Black,
+                disabledContentColor = Color.Gray
+            )
+        ) {
             Image(
                 imageVector = Icons.AutoMirrored.Filled.LibraryBooks,
                 contentDescription = "library image"
@@ -266,9 +280,10 @@ fun CreateLibraryCard(
 @Composable
 fun AddNewLibraries(
     modifier: Modifier = Modifier,
-    circularButtonFunction: () -> Unit,
-    removeButtonFunction: (Int) -> Unit,
-    uploadingButtonFunction: () -> Unit,
+    circularButtonFunction: () -> Unit = {},
+    removeButtonFunction: (Int) -> Unit = {},
+    uploadingButtonFunction: () -> Unit = {},
+    reloadFunction: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -307,6 +322,7 @@ fun AddNewLibraries(
             onClick = {
                 val libraryId = LibraryLocation.viewCurrentLibraryIndex()
                 removeButtonFunction(libraryId)
+                reloadFunction()
             },
             modifier = Modifier.padding(10.dp)
         ) {
@@ -325,7 +341,7 @@ fun CreateLibrary(
     modifier: Modifier = Modifier,
     createFunction: (String) -> Unit = {},
     exitFunction: () -> Unit = {},
-    reloadFunction: () -> Unit
+    reloadFunction: () -> Unit = {}
 ) {
     var textValue by remember { mutableStateOf("") }
     Box(
