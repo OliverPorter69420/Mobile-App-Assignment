@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells.Fixed
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.LibraryBooks
 import androidx.compose.material.icons.filled.Add
@@ -191,19 +192,20 @@ private fun CreateLibraryGrid(
 ) {
     when (librariesUiStates) {
         is LibraryUiState.Success -> {
-            LazyHorizontalGrid(
-                rows = Fixed(2),
+            LazyVerticalGrid(
+                columns = Fixed(2),
                 modifier = Modifier.padding(10.dp)
             ) {
-                librariesUiStates.libraries?.forEach {
-                    item {
-                        CreateLibraryCard(
-                            library = it,
-                            navigateToBookDescription = {
-                                /*todo add a Library description screen that shows the books in the library*/
-                            }
-                        )
-                    }
+                items(
+                    count = librariesUiStates.libraries?.size ?: 0,
+                    key = { libraryId -> librariesUiStates.libraries?.get(libraryId)!! },
+                ) { libraryId ->
+                    CreateLibraryCard(
+                        library = librariesUiStates.libraries?.get(libraryId)!! ,
+                        navigateToBookDescription = {
+                            /*todo add a Library description screen that shows the books in the library*/
+                        }
+                    )
                 }
             }
         }
@@ -221,13 +223,15 @@ fun CreateLibraryCard(
     var isPressed by remember { mutableStateOf(false) }
 
     Surface(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier
+            .padding(10.dp)
             .background(
                 if (isPressed) {
                     Color.Blue
                 } else {
                     Color.Gray
-                })
+                }
+            )
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
@@ -243,6 +247,8 @@ fun CreateLibraryCard(
                         isPressed = false
                     }
                 )
+
+                Log.d("isPressed", "$isPressed")
             }
     ) {
         Card(modifier = Modifier) {
