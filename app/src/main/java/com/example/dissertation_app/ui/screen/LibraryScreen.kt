@@ -186,7 +186,9 @@ private fun CreateLibraryGrid(librariesUiStates: LibraryUiState?) {
                     item {
                         CreateLibraryCard(
                             library = it,
-                            navigateToBookDescription = {}
+                            navigateToBookDescription = {
+                                /*todo add a Library description screen that shows the books in the library*/
+                            }
                         )
                     }
                 }
