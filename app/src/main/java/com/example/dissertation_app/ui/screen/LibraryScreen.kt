@@ -247,6 +247,7 @@ fun CreateLibraryCard(
                     onPress = {
                         try {
                             isPressed = true
+                            LibraryLocation.selectLibraryIndex(library.id)
                             tryAwaitRelease()
                         } finally {
                             isPressed = false
