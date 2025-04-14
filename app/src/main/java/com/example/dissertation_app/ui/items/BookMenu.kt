@@ -65,7 +65,7 @@ fun BookMenu(
 
         is BookUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
 
-        is BookUiState.Success -> MainContentFragment()
+        is BookUiState.Success -> MainContentFragment().showPhotoGrid()
 
         is BookUiState.Empty -> EmptyScreen(modifier = modifier)
 

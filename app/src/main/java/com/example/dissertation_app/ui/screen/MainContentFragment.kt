@@ -43,9 +43,19 @@ class MainContentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    fun showChildFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction()
-            .replace(R.id.child_fragment_container, fragment)
-            .commit()
+    fun showPhotoGrid(): ComposeView {
+        val composeView = ComposeView(requireContext())
+        composeView.setContent {
+            val viewModel = SearchLocation.getBookViewModel()
+            BookGridScreen(
+                viewModel = viewModel,
+                fragmentManager = childFragmentManager,
+                onFragmentCreated = {
+                    /*todo add a back function*/
+                },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        return composeView
     }
 }
