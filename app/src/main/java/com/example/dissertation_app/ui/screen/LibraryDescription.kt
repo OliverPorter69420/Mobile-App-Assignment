@@ -5,10 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.RotateLeft
-import androidx.compose.material.icons.filled.RotateLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
+import com.example.dissertation_app.ui.items.LibraryBookMenu
 import com.example.dissertation_app.ui.items.LibraryBookViewModel
 import com.example.dissertation_app.ui.items.SavedLibraryViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
@@ -76,7 +75,12 @@ fun LibraryDescription (
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Library Description page")
+            LibraryBookMenu(
+                uiState = savedLibraryViewModel?.savedLibraryUiState!!,
+                navigateToBookDescription = navigateToBookDescription,
+                getBooks = savedLibraryViewModel::getLibraryBooks,
+                deleteBook = savedLibraryViewModel::removeBookFromLibrary
+            )
         }
     }
 }
