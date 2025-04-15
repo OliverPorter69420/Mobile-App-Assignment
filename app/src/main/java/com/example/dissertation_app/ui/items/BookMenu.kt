@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.scale
 import coil.ImageLoader
 import coil.compose.AsyncImage
@@ -246,18 +247,21 @@ fun PhotoLoader (
         }
     ) {
         Column(
+            modifier = modifier.size(200.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(
+                text = bookDescription.toString(),
+                fontSize = 18.sp,
+            )
+
             Card(
-                modifier = modifier.size(200.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                 shape = RoundedCornerShape(15.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
             ) {
-                Text(text = bookDescription.toString())
-
                 val context = LocalContext.current
 
                 val imageLoader = ImageLoader.Builder(context)
