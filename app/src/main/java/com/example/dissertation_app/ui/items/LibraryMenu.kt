@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -45,16 +46,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dissertation_app.data.dataset.library.Libraries
 import com.example.dissertation_app.ui.screen.LibraryLocation
+import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateLibraryGrid(
     librariesUiStates: LibraryUiState?,
     navigateToLibraryDescription: () -> Unit = {}
 ) {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
     when (librariesUiStates) {
         is LibraryUiState.Success -> {
             LazyVerticalGrid(
@@ -89,11 +95,10 @@ fun CreateLibraryCard(
         targetValue = if (isPressed) Color.Cyan else Color.LightGray,
         label = "Background Color Animation"
     )
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Surface(
         modifier = Modifier
-            .padding(1.dp)
+            .padding(10.dp)
 
             .pointerInput(Unit) {
                 detectTapGestures(
@@ -105,8 +110,14 @@ fun CreateLibraryCard(
                         }
                     },
 
+
                     onPress = {
+                        val pressStartTime = System.currentTimeMillis()
+                        isPressed = false
                         try {
+                            while (System.currentTimeMillis() - pressStartTime < 200L) {
+                                delay(20L)
+                            }
                             isPressed = true
                             LibraryLocation.selectLibraryIndex(library.id)
                             tryAwaitRelease()
@@ -117,26 +128,29 @@ fun CreateLibraryCard(
                 )
             },
         shape = RoundedCornerShape(8.dp),
+        color = backgroundColor,
         shadowElevation = 4.dp
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Card(
+            modifier = Modifier.size(100.dp),
+            colors = CardColors(
+                containerColor = backgroundColor,
+                contentColor = Color.Black,
+                disabledContainerColor = Color.Cyan,
+                disabledContentColor = Color.Black
+            )
         ) {
-            Card(
-                modifier = Modifier.size(100.dp)
-                    .nestedScroll(scrollBehavior.nestedScrollConnection),
-
-                colors = CardColors(
-                    containerColor = backgroundColor,
-                    contentColor = Color.Black,
-                    disabledContainerColor = Color.Cyan,
-                    disabledContentColor = Color.Black
-                )
-            ) {
+            Column(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+                ) {
                 Image(
                     imageVector = Icons.AutoMirrored.Filled.LibraryBooks,
-                    contentDescription = "library image"
+                    contentDescription = "library image",
+                    contentScale = ContentScale.FillBounds
                 )
 
                 Text(text = library.libraryName)
