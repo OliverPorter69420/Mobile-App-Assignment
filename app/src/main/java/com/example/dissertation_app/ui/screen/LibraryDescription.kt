@@ -3,6 +3,9 @@ package com.example.dissertation_app.ui.screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.RotateLeft
+import androidx.compose.material.icons.filled.RotateLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -51,6 +54,8 @@ fun LibraryDescription (
     val savedLibraryViewModel: SavedLibraryViewModel? = LibraryDescriptionLocation.getSavedLibraryViewModel()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    val icon = Icons.AutoMirrored.Filled.RotateLeft
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -59,7 +64,7 @@ fun LibraryDescription (
                 canNavigateBack = false,
                 scrollBehavior = scrollBehavior,
                 iconButtonFunctional = true,
-                buttonFunctionality = navigateToAccount,
+                buttonFunctionality = {},
                 icon = icon,
                 iconDescription = "account"
             )
