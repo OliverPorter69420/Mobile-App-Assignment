@@ -72,8 +72,6 @@ object LibraryLocation : NavigationDestination {
     override val route = "library"
     override val titleRes = R.string.library_screen
     private var selectLibraryIndex: Int by mutableIntStateOf(-1)
-    private var libraryBookViewModel: LibraryBookViewModel? = null
-    private var savedLibraryViewModel: SavedLibraryViewModel? = null
     private var libraryViewModel: LibraryViewModel? = null
 
     fun selectLibraryIndex(id:Int) {
@@ -82,22 +80,6 @@ object LibraryLocation : NavigationDestination {
 
     fun viewCurrentLibraryIndex(): Int {
         return selectLibraryIndex
-    }
-
-    fun getLibraryBookViewModel(): LibraryBookViewModel? {
-        return libraryBookViewModel
-    }
-
-    fun libraryBookViewModel(viewModel: LibraryBookViewModel?) {
-        libraryBookViewModel = viewModel
-    }
-
-    fun getSavedLibraryViewModel(): SavedLibraryViewModel? {
-        return savedLibraryViewModel
-    }
-
-    fun savedLibraryViewModel(viewModel: SavedLibraryViewModel?) {
-        savedLibraryViewModel = viewModel
     }
 
     fun getLibraryViewModel(): LibraryViewModel? {
@@ -112,13 +94,10 @@ object LibraryLocation : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LibraryScreen(
-    navigateToBookDescription: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToLibraryDescription: () -> Unit,
 ) {
-    val libraryBookViewModel: LibraryBookViewModel? = LibraryLocation.getLibraryBookViewModel()
-    val savedLibraryViewModel: SavedLibraryViewModel? = LibraryLocation.getSavedLibraryViewModel()
     val libraryViewModel : LibraryViewModel? = LibraryLocation.getLibraryViewModel()
-    val bookViewModel: BookViewModel? = SearchLocation.getBookViewModel()
 
     var showCreateLibrary by remember { mutableStateOf(false) }
 

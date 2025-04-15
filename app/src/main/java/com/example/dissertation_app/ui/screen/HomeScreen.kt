@@ -49,10 +49,10 @@ fun HomeScreen(
     SearchLocation.bookViewModel(bookViewModel)
 
     val libraryBookViewModel: LibraryBookViewModel? = viewModel(factory = LibraryBookViewModel.Factory)
-    LibraryLocation.libraryBookViewModel(libraryBookViewModel)
+    LibraryDescriptionLocation.libraryBookViewModel(libraryBookViewModel)
 
     val savedLibraryViewModel : SavedLibraryViewModel? = viewModel(factory = SavedLibraryViewModel.Factory)
-    LibraryLocation.savedLibraryViewModel(savedLibraryViewModel)
+    LibraryDescriptionLocation.savedLibraryViewModel(savedLibraryViewModel)
 
     val libraryViewModel : LibraryViewModel? = viewModel(factory = LibraryViewModel.factory)
     LibraryLocation.libraryViewModel(libraryViewModel)

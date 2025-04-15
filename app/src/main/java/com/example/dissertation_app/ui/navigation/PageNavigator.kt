@@ -16,6 +16,8 @@ import com.example.dissertation_app.ui.items.BookViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dissertation_app.ui.screen.AccountLocation
 import com.example.dissertation_app.ui.screen.AccountScreen
+import com.example.dissertation_app.ui.screen.LibraryDescription
+import com.example.dissertation_app.ui.screen.LibraryDescriptionLocation
 import com.example.dissertation_app.ui.screen.LibraryLocation
 import com.example.dissertation_app.ui.screen.LibraryScreen
 import okhttp3.internal.platform.android.AndroidSocketAdapter.Companion.factory
@@ -57,6 +59,13 @@ fun PageNavigator(
         composable(route = LibraryLocation.route) {
             LibraryScreen(
                 navigateToHome = { navController.navigate(HomeLocation.route) },
+                navigateToLibraryDescription = {navController.navigate(LibraryDescriptionLocation.route)}
+            )
+        }
+
+        composable(route = LibraryDescriptionLocation.route) {
+            LibraryDescription(
+                navigateToLibraryScreen = { navController.navigate(LibraryLocation.route) },
                 navigateToBookDescription = { navController.navigate(BookDescriptionLocation.route) }
             )
         }
