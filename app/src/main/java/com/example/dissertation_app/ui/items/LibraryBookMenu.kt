@@ -9,4 +9,7 @@ fun LibraryBookMenu(
     getBooks: (Int) -> Unit = {},
     deleteBook: (Int,Int) -> Unit
 ) {
+    /*todo finish this part of the program and then improve the add library book functionality
+    *  to add books to the library the user chooses and then add some small fixes (this is all
+    *  for adding accounts in later on after this is all sorted*/
 }
