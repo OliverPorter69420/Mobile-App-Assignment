@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -244,16 +245,16 @@ fun PhotoLoader (
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = bookDescription.toString())
-
             Card(
-                modifier = modifier,
+                modifier = modifier.size(200.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                 shape = RoundedCornerShape(15.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
             ) {
+                Text(text = bookDescription.toString())
+
                 val context = LocalContext.current
 
                 val imageLoader = ImageLoader.Builder(context)

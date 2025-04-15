@@ -258,21 +258,26 @@ fun CreateLibraryCard(
         shape = RoundedCornerShape(8.dp),
         shadowElevation = 4.dp
     ) {
-        Card(
-            modifier = Modifier.size(100.dp),
-            colors = CardColors(
-                containerColor = backgroundColor,
-                contentColor = Color.Black,
-                disabledContainerColor = Color.Black,
-                disabledContentColor = Color.Gray
-            )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Image(
-                imageVector = Icons.AutoMirrored.Filled.LibraryBooks,
-                contentDescription = "library image"
-            )
+            Card(
+                modifier = Modifier.size(100.dp),
+                colors = CardColors(
+                    containerColor = backgroundColor,
+                    contentColor = Color.Black,
+                    disabledContainerColor = Color.Cyan,
+                    disabledContentColor = Color.Black
+                )
+            ) {
+                Image(
+                    imageVector = Icons.AutoMirrored.Filled.LibraryBooks,
+                    contentDescription = "library image"
+                )
 
-            Text(text = library.libraryName)
+                Text(text = library.libraryName)
+            }
         }
     }
 }
