@@ -46,7 +46,7 @@ fun BookDescriptionPage(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val bookInformation = BookDescriptionLocation.getBookInformation()
-    val libraryBookViewModel: LibraryBookViewModel? = LibraryLocation.getLibraryBookViewModel()
+    val libraryBookViewModel: LibraryBookViewModel? = LibraryDescriptionLocation.getLibraryBookViewModel()
     val icon = Icons.Filled.Bookmark
 
     Scaffold (

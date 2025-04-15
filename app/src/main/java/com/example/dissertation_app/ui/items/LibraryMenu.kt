@@ -52,7 +52,8 @@ import com.example.dissertation_app.ui.screen.LibraryLocation
 
 @Composable
 fun CreateLibraryGrid(
-    librariesUiStates: LibraryUiState?
+    librariesUiStates: LibraryUiState?,
+    navigateToLibraryDescription: () -> Unit = {}
 ) {
     when (librariesUiStates) {
         is LibraryUiState.Success -> {
@@ -66,9 +67,7 @@ fun CreateLibraryGrid(
                 ) { libraryId ->
                     CreateLibraryCard(
                         library = librariesUiStates.libraries?.get(libraryId)!! ,
-                        navigateToBookDescription = {
-                            /*todo add a Library description screen that shows the books in the library*/
-                        }
+                        navigateToLibraryDescription = navigateToLibraryDescription
                     )
                 }
             }
@@ -83,7 +82,7 @@ fun CreateLibraryGrid(
 @Composable
 fun CreateLibraryCard(
     library: Libraries,
-    navigateToBookDescription: () -> Unit
+    navigateToLibraryDescription: () -> Unit
 ) {
     var isPressed by remember { mutableStateOf(false) }
     val backgroundColor by animateColorAsState(
@@ -102,7 +101,7 @@ fun CreateLibraryCard(
                         if (!isPressed) {
                             Log.d("isPressed", "$isPressed")
 
-                            navigateToBookDescription()
+                            navigateToLibraryDescription()
                         }
                     },
 

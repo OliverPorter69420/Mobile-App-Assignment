@@ -1,5 +1,7 @@
 package com.example.dissertation_app.ui.screen
 
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import com.example.dissertation_app.R
 import com.example.dissertation_app.ui.items.LibraryBookViewModel
 import com.example.dissertation_app.ui.items.SavedLibraryViewModel
@@ -29,10 +31,13 @@ object LibraryDescriptionLocation : NavigationDestination {
     }
 }
 
-class LibraryDescription (
+@Composable
+fun LibraryDescription (
     navigateToLibraryScreen: () -> Unit,
     navigateToBookDescription: () -> Unit,
 ){
     val libraryBookViewModel: LibraryBookViewModel? = LibraryDescriptionLocation.getLibraryBookViewModel()
     val savedLibraryViewModel: SavedLibraryViewModel? = LibraryDescriptionLocation.getSavedLibraryViewModel()
+
+    Text(text = "Library Description")
 }

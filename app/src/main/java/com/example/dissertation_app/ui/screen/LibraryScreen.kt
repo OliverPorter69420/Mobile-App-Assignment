@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.data.dataset.library.Libraries
@@ -123,4 +124,13 @@ fun LibraryScreen(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LibraryScreenPreview() {
+    LibraryScreen(
+        navigateToHome = {},
+        navigateToLibraryDescription = {}
+    )
 }
