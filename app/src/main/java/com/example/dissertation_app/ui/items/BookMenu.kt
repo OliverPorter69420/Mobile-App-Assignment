@@ -16,6 +16,7 @@ import androidx.compose.material.icons.outlined.Replay
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,6 +47,7 @@ import coil.memory.MemoryCache
 import coil.request.ImageRequest
 import coil.size.Size
 import coil.transform.Transformation
+import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.model.BookObjects
 import com.example.dissertation_app.model.VolumeInfo
@@ -426,6 +428,16 @@ fun PhotoGridPreview() {
         thumbnails = thumbnails.toMutableList(),
         resetAction = {},
         navigateToBookDescription = {},
+        modifier = Modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SearchBarPreview() {
+    TextBar (
+        onUpdateSearchTerm = {},
+        getBooks = {},
         modifier = Modifier
     )
 }
