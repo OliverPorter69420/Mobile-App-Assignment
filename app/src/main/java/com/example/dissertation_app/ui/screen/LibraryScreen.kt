@@ -74,8 +74,6 @@ fun LibraryScreen(
             )
         },
 
-        /*todo add in functionality to add a new library and then redo the add book functionality to add a new book to the library, this might take a long time to redo all the already existing functions but eh whatever it will make it all look nicer/cleaner/all that in the future */
-
         bottomBar = {
             AnimatedVisibility(
                 visible = true,
@@ -123,6 +121,7 @@ fun LibraryScreen(
         ) {
             CreateLibraryGrid(
                 librariesUiStates = libraryViewModel?.libraryUiState,
+                navigateToLibraryDescription = navigateToLibraryDescription
             )
         }
     }
