@@ -60,8 +60,9 @@ fun LibraryDescription (
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BookTopAppBar(
-                title = "Main Screen",
-                canNavigateBack = false,
+                title = "Library Description Screen",
+                canNavigateBack = true,
+                navigateUp = navigateToLibraryScreen,
                 scrollBehavior = scrollBehavior,
                 iconButtonFunctional = true,
                 buttonFunctionality = {},
