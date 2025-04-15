@@ -119,15 +119,12 @@ fun LibraryScreen(
     val savedLibraryViewModel: SavedLibraryViewModel? = LibraryLocation.getSavedLibraryViewModel()
     val libraryViewModel : LibraryViewModel? = LibraryLocation.getLibraryViewModel()
     val bookViewModel: BookViewModel? = SearchLocation.getBookViewModel()
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     var showCreateLibrary by remember { mutableStateOf(false) }
 
     libraryViewModel?.getLibraries()
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-
         topBar = {
             BookTopAppBar(
                 title = "Library Screen",
@@ -219,6 +216,7 @@ private fun CreateLibraryGrid(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateLibraryCard(
     library: Libraries,
@@ -229,6 +227,7 @@ fun CreateLibraryCard(
         targetValue = if (isPressed) Color.Cyan else Color.LightGray,
         label = "Background Color Animation"
     )
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Surface(
         modifier = Modifier
@@ -263,7 +262,9 @@ fun CreateLibraryCard(
             verticalArrangement = Arrangement.Center
         ) {
             Card(
-                modifier = Modifier.size(100.dp),
+                modifier = Modifier.size(100.dp)
+                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+
                 colors = CardColors(
                     containerColor = backgroundColor,
                     contentColor = Color.Black,

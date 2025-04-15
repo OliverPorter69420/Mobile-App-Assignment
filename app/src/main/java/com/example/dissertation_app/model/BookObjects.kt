@@ -12,11 +12,11 @@ data class BookResponse(
 
 @Serializable
 data class BookObjects(
-    val kind: String?,          // e.g., "books#volume"
-    val id: String?,
-    val etag: String?,
-    val selfLink: String?,
-    val volumeInfo: VolumeInfo? // Nested object for book details
+    val kind: String? = "Not defined",          // e.g., "books#volume"
+    val id: String? = "Not defined",
+    val etag: String? = "Not defined",
+    val selfLink: String? = "Not defined",
+    val volumeInfo: VolumeInfo? = null // Nested object for book details
 )
 
 @Serializable

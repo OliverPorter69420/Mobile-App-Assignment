@@ -46,6 +46,8 @@ import coil.size.Size
 import coil.transform.Transformation
 import com.example.dissertation_app.R
 import com.example.dissertation_app.model.BookObjects
+import com.example.dissertation_app.model.ImageLinks
+import com.example.dissertation_app.model.VolumeInfo
 import com.example.dissertation_app.ui.screen.BookDescriptionLocation
 
 @Composable
@@ -145,7 +147,8 @@ fun LoadingScreen(modifier: Modifier) {
 @Composable
 fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier) {
     Column(
-        modifier = modifier.padding(10.dp)
+        modifier = modifier
+            .padding(10.dp)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -285,7 +288,8 @@ fun PhotoLoader (
                     placeholder = painterResource(R.drawable.loading_img),
                     contentDescription = bookDescription ?: "book image",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .clip(RoundedCornerShape(15.dp))
                 )
             }
@@ -306,6 +310,73 @@ class CustomScaleTransformation(private val targetWidth: Int, private val target
 fun ErrorScreenPreview() {
     ErrorScreen(
         retryAction = {},
+        modifier = Modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PhotoGridPreview() {
+    val volumeInfo : VolumeInfo = VolumeInfo(title = "Book Cover")
+
+    val books : Array<BookObjects> = arrayOf(
+        BookObjects(
+            volumeInfo = volumeInfo
+        ),
+
+        BookObjects(
+            volumeInfo = volumeInfo
+        ),
+
+        BookObjects(
+            volumeInfo = volumeInfo
+        ),
+
+        BookObjects(
+            volumeInfo = volumeInfo
+        ),
+
+        BookObjects(
+            volumeInfo = volumeInfo
+        ),
+
+        BookObjects(
+            volumeInfo = volumeInfo
+        ),
+
+        BookObjects(
+            volumeInfo = volumeInfo
+        ),
+
+        BookObjects(
+            volumeInfo = volumeInfo
+        ),
+
+        BookObjects(
+            volumeInfo = volumeInfo
+        ),
+
+        BookObjects(
+            volumeInfo = volumeInfo
+        )
+    )
+
+    val thumbnails : Array<String> = arrayOf(
+        "test",
+        "test",
+        "test",
+        "test",
+        "test",
+        "test",
+        "test",
+        "test"
+    )
+
+    BookGridScreen(
+        bookSearch = books.toList(),
+        thumbnails = thumbnails.toMutableList(),
+        resetAction = {},
+        navigateToBookDescription = {},
         modifier = Modifier
     )
 }
