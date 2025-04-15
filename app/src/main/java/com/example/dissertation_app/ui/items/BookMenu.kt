@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -47,7 +48,6 @@ import coil.size.Size
 import coil.transform.Transformation
 import com.example.dissertation_app.R
 import com.example.dissertation_app.model.BookObjects
-import com.example.dissertation_app.model.ImageLinks
 import com.example.dissertation_app.model.VolumeInfo
 import com.example.dissertation_app.ui.screen.BookDescriptionLocation
 
@@ -208,19 +208,24 @@ fun BookGridScreen(
             ) {
                 items(
                     count = thumbnails.size,
-                    key = { thumbnail -> thumbnails[thumbnail] },
+                    key = { bookId -> thumbnails[bookId] },
 
-                    ) { thumbnail ->
+                    ) { bookId ->
+
                     PhotoLoader(
-                        imageLinks = thumbnails[thumbnail],
-                        bookDescription = bookSearch?.get(thumbnail)?.volumeInfo?.title.toString(),
+                        imageLinks = thumbnails[bookId],
+
+                        bookObject = bookSearch?.get(bookId),
+
+                        onChangeBookDescription = {
+                            BookDescriptionLocation.bookInformation(bookSearch?.get(bookId))
+                        },
+
                         onViewBookDetails = {
-                            selectedBookID = thumbnail.toString()
+                            selectedBookID = bookId.toString()
                             navigateToBookDescription()
                         },
-                        onChangeBookDescription = {
-                            BookDescriptionLocation.bookInformation(bookSearch?.get(thumbnail))
-                        },
+
                         modifier = modifier
                             .padding(2.dp)
                             .fillMaxSize()
@@ -235,10 +240,10 @@ fun BookGridScreen(
 @Composable
 fun PhotoLoader (
     imageLinks: String?,
-    bookDescription: String?,
+    bookObject: BookObjects?,
     onChangeBookDescription: () -> Unit,
     onViewBookDetails: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Surface(
         onClick = {
@@ -250,9 +255,10 @@ fun PhotoLoader (
             modifier = modifier.size(200.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = bookDescription.toString(),
-                fontSize = 18.sp,
+
+            CreateDescriptionText(
+                title = bookObject?.volumeInfo?.title,
+                subtitle = bookObject?.volumeInfo?.subtitle
             )
 
             Card(
@@ -290,7 +296,7 @@ fun PhotoLoader (
                     imageLoader = imageLoader,
                     error = painterResource(R.drawable.ic_broken_image),
                     placeholder = painterResource(R.drawable.loading_img),
-                    contentDescription = bookDescription ?: "book image",
+                    contentDescription = "book image for ${bookObject?.volumeInfo?.title}",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
@@ -298,6 +304,45 @@ fun PhotoLoader (
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun CreateDescriptionText(
+    title: String?,
+    subtitle: String?
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Text(
+            text = if (title != "currently unavailable") {
+                title.toString()
+            } else {
+                "Title is not loading"
+            },
+
+            fontSize = 16.sp,
+
+            softWrap = true,
+
+            maxLines = 2
+        )
+
+        Text(
+            text = if (subtitle != "currently unavailable") {
+                subtitle.toString()
+            } else {
+                ""
+            },
+
+            fontSize = 12.sp,
+
+            softWrap = true,
+
+            maxLines = 2
+        )
     }
 }
 
@@ -321,7 +366,7 @@ fun ErrorScreenPreview() {
 @Preview(showBackground = true)
 @Composable
 fun PhotoGridPreview() {
-    val volumeInfo : VolumeInfo = VolumeInfo(title = "Book Cover")
+    val volumeInfo : VolumeInfo = VolumeInfo(title = "Book Cover", subtitle = "Book Cover")
 
     val books : Array<BookObjects> = arrayOf(
         BookObjects(
