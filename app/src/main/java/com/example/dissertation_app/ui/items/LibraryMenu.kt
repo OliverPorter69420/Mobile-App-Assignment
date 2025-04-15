@@ -63,24 +63,35 @@ fun CreateLibraryGrid(
 
     when (librariesUiStates) {
         is LibraryUiState.Success -> {
-            LazyVerticalGrid(
-                columns = Fixed(2),
-                modifier = Modifier.padding(10.dp)
-            ) {
-                items(
-                    count = librariesUiStates.libraries?.size ?: 0,
-                    key = { libraryId -> librariesUiStates.libraries?.get(libraryId)?.id!! },
-                ) { libraryId ->
-                    CreateLibraryCard(
-                        library = librariesUiStates.libraries?.get(libraryId)!! ,
-                        navigateToLibraryDescription = navigateToLibraryDescription
-                    )
-                }
-            }
+            CreateGridStructure(
+                libraries = librariesUiStates.libraries,
+                navigateToLibraryDescription = navigateToLibraryDescription
+            )
         }
         is LibraryUiState.Loading -> Text(text = "Loading")
         is LibraryUiState.Error -> Text(text = "Error")
         null -> Text(text = "null")
+    }
+}
+
+@Composable
+fun CreateGridStructure(
+    libraries : List<Libraries>?,
+    navigateToLibraryDescription: () -> Unit = {}
+) {
+    LazyVerticalGrid(
+        columns = Fixed(2),
+        modifier = Modifier.padding(10.dp)
+    ) {
+        items(
+            count = libraries?.size ?: 0,
+            key = { libraryId -> libraries?.get(libraryId)?.id!! },
+        ) { libraryId ->
+            CreateLibraryCard(
+                library = libraries?.get(libraryId)!!,
+                navigateToLibraryDescription = navigateToLibraryDescription
+            )
+        }
     }
 }
 
@@ -312,5 +323,48 @@ fun AddNewLibrariesPreview() {
         circularButtonFunction = {},
         removeButtonFunction = {},
         uploadingButtonFunction = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CreateGridPreview(){
+    val libraries : Array<Libraries> = arrayOf(
+        Libraries(
+            id = 1,
+            libraryName = "test"
+        ),
+        Libraries(
+            id = 2,
+            libraryName = "test"
+        ),
+        Libraries(
+            id = 3,
+            libraryName = "test"
+        ),
+        Libraries(
+            id = 4,
+            libraryName = "test"
+        ),
+        Libraries(
+            id = 5,
+            libraryName = "test"
+        ),
+        Libraries(
+            id = 6,
+            libraryName = "test"
+        ),
+        Libraries(
+            id = 7,
+            libraryName = "test"
+        ),
+        Libraries(
+            id = 8,
+            libraryName = "test"
+        ),
+    )
+    CreateGridStructure(
+        libraries = libraries.toList(),
+        navigateToLibraryDescription = {}
     )
 }
