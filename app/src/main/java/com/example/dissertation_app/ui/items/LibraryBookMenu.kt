@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells.Fixed
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,7 +18,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
+import com.example.dissertation_app.model.BookObjects
+import com.example.dissertation_app.model.VolumeInfo
+import com.example.dissertation_app.ui.screen.BookDescriptionLocation
 import com.example.dissertation_app.ui.screen.LibraryLocation
+import kotlin.collections.joinToString
 
 @Composable
 fun LibraryBookMenu(
@@ -121,11 +127,45 @@ fun CreateLibraryBookBox(
     val description = libraryBook.description
     val imageUrl = libraryBook.imageUrl
 
-    Box(
-        modifier = Modifier.padding(10.dp)
-            .background(Color.LightGray)
-    ) {  }
+    Surface(
+        onClick = {
+            BookDescriptionLocation.bookInformation(
+                libraryBook.toBookObject(
+                    libraryBooks = libraryBook
+                )
+            )
+            navigateToBookDescription
+        }
+    ) {
+        Box(
+            modifier = Modifier.padding(10.dp)
+                .background(Color.LightGray)
+        ) {
+            IconButton(
+                onClick = {
+                    deleteBooks
+                    getBooks
+                },
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) { }
+        }
+    }
 }
+
+private fun LibraryBooks.toBookObject(libraryBooks: LibraryBooks?): BookObjects? {
+    return if (libraryBooks == null) {
+        null
+    } else {
+        BookObjects(
+            volumeInfo = VolumeInfo(
+                title = libraryBooks.title,
+                authors = libraryBooks.author.split(","),
+                description = libraryBooks.description
+            )
+        )
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
