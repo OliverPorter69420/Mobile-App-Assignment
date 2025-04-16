@@ -298,10 +298,9 @@ fun PhotoLoader (
                     imageLoader = imageLoader,
                     error = painterResource(R.drawable.ic_broken_image),
                     placeholder = painterResource(R.drawable.loading_img),
-                    contentDescription = "book image for ${bookObject?.volumeInfo?.title}",
+                    contentDescription = "book cover for ${bookObject?.volumeInfo?.title}",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier = Modifier.fillMaxSize()
                         .clip(RoundedCornerShape(15.dp))
                 )
             }
