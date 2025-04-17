@@ -1,9 +1,8 @@
 package com.example.dissertation_app.data.dataset.libraryBook
 
 class LocalLibraryBookRepository(private val libraryBooksDao: LibraryBooksDao) : LibraryBooksRepository {
-    override fun getLibraryBooksStream(): List<LibraryBooks> = libraryBooksDao.getAllLibraryBooks()
 
-    override fun getLibraryBookStream(id: Int): LibraryBooks? = libraryBooksDao.getLibraryBookById(id)
+    override fun getLibraryBook(id: String): LibraryBooks? = libraryBooksDao.getLibraryBookById(id)
 
     override suspend fun insertLibraryBook(libraryBook: LibraryBooks) = libraryBooksDao.insertLibraryBook(libraryBook)
 

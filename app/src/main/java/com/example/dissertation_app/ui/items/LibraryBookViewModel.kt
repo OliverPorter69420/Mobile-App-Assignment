@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 sealed interface LibraryBookUiState {
-    data class Success(val libraryBooks: List<LibraryBooks>?, val libraryBook: LibraryBooks?) : LibraryBookUiState
+    data class Success(val libraryBook: LibraryBooks?) : LibraryBookUiState
     object Error : LibraryBookUiState
     object Empty : LibraryBookUiState
     object FunctionSuccess : LibraryBookUiState
@@ -40,24 +40,12 @@ class LibraryBookViewModel(
         }
     }
 
-    fun loadLibraryBooks() {
+    fun searchLibraryBook(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             libraryBookUiState = try {
-                val books = libraryRepository.getLibraryBooksStream()
+                val book = libraryRepository.getLibraryBook(id)
 
-                LibraryBookUiState.Success(books, null)
-            } catch (e: Exception) {
-                LibraryBookUiState.Error
-            }
-        }
-    }
-
-    fun searchLibraryBook(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            libraryBookUiState = try {
-                val book = libraryRepository.getLibraryBookStream(id)
-
-                LibraryBookUiState.Success(null, book)
+                LibraryBookUiState.Success(book)
             } catch (e: Exception) {
                 LibraryBookUiState.Error
             }

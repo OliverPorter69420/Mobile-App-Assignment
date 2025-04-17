@@ -12,9 +12,6 @@ interface LibrariesDao {
     @Query("SELECT * FROM libraries")
     fun getAllLibraries(): List<Libraries>
 
-    @Query("SELECT * FROM libraries WHERE id = :id")
-    fun getLibraryById(id: Int): Libraries?
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertLibrary(library: Libraries)
 

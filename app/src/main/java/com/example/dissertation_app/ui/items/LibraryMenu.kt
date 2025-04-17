@@ -50,6 +50,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dissertation_app.data.dataset.library.Libraries
+import com.example.dissertation_app.ui.screen.LibraryDescriptionLocation
 import com.example.dissertation_app.ui.screen.LibraryLocation
 import kotlinx.coroutines.delay
 
@@ -115,7 +116,7 @@ fun CreateLibraryCard(
                 detectTapGestures(
                     onTap = {
                         if (!isPressed) {
-                            Log.d("isPressed", "$isPressed")
+                            LibraryDescriptionLocation.selectLibraryIndex(library.id)
 
                             navigateToLibraryDescription()
                         }

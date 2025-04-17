@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.dissertation_app.BookApplication
-import com.example.dissertation_app.data.dataset.library.Libraries
 import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
 import com.example.dissertation_app.data.dataset.savedLibraries.SavedLibraries
 import com.example.dissertation_app.data.dataset.savedLibraries.SavedLibrariesRepository
@@ -18,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 sealed interface SavedLibraryUiState {
-    data class Success(val libraries: List<Libraries>?, val libraryBooks: List<LibraryBooks>?) : SavedLibraryUiState
+    data class Success(val libraryBooks: List<LibraryBooks>?) : SavedLibraryUiState
     object Error : SavedLibraryUiState
     object Empty : SavedLibraryUiState
 }
@@ -40,22 +39,11 @@ class SavedLibraryViewModel(
         }
     }
 
-    fun getLibraries() {
-        viewModelScope.launch(Dispatchers.IO) {
-            savedLibraryUiState = try {
-                val libraries = savedLibrariesRepository.getLibrariesInSavedLibrary()
-                SavedLibraryUiState.Success(libraries = libraries , libraryBooks = null)
-            } catch (e: Exception) {
-                SavedLibraryUiState.Error
-            }
-        }
-    }
-
     fun getLibraryBooks(libraryId : Int) {
         viewModelScope.launch(Dispatchers.IO) {
             savedLibraryUiState = try {
                 val libraryBooks = savedLibrariesRepository.getBookInSavedLibrary(libraryId)
-                SavedLibraryUiState.Success(libraries = null , libraryBooks = libraryBooks)
+                SavedLibraryUiState.Success(libraryBooks = libraryBooks)
             } catch (e: Exception) {
                 SavedLibraryUiState.Error
             }

@@ -1,6 +1,5 @@
 package com.example.dissertation_app.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +21,7 @@ import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
 import com.example.dissertation_app.model.BookObjects
+import com.example.dissertation_app.ui.items.LibraryBookUiState
 import com.example.dissertation_app.ui.items.LibraryBookViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
 
@@ -29,6 +29,7 @@ object BookDescriptionLocation : NavigationDestination {
     override val route = "bookDescription"
     override val titleRes = R.string.book_description_screen
     private var bookInformation: BookObjects? = null
+    private var libraryBookViewModel: LibraryBookViewModel? = null
 
     fun bookInformation(bookInformation: BookObjects?) {
         this.bookInformation = bookInformation
@@ -36,6 +37,15 @@ object BookDescriptionLocation : NavigationDestination {
 
     fun getBookInformation(): BookObjects? {
         return bookInformation
+    }
+
+
+    fun getLibraryBookViewModel(): LibraryBookViewModel? {
+        return libraryBookViewModel
+    }
+
+    fun libraryBookViewModel(viewModel: LibraryBookViewModel?) {
+        libraryBookViewModel = viewModel
     }
 }
 
@@ -46,7 +56,7 @@ fun BookDescriptionPage(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val bookInformation = BookDescriptionLocation.getBookInformation()
-    val libraryBookViewModel: LibraryBookViewModel? = LibraryDescriptionLocation.getLibraryBookViewModel()
+    val libraryBookViewModel: LibraryBookViewModel? = BookDescriptionLocation.getLibraryBookViewModel()
     val icon = Icons.Filled.Bookmark
 
     Scaffold (
@@ -62,12 +72,15 @@ fun BookDescriptionPage(
                 navigateUp = backToSearch,
                 iconButtonFunctional = true,
                 buttonFunctionality = {
-                    val book = bookInformation.toLibraryBook()
 
-                    if (book != null) {
-                        libraryBookViewModel?.addLibraryBook(book)
-                    } else {
-                        Log.d("BookDescriptionPage", "book is null")
+                    var book = getBookmarkedBook(
+                        bookId = bookInformation?.id,
+                        uiState = libraryBookViewModel?.libraryBookUiState!!,
+                        searchLibrary = libraryBookViewModel::searchLibraryBook
+                    )
+
+                    if (book == null) {
+                        book = bookInformation.toLibraryBook()
                     }
 
                     /*todo: make it so that bookmarks can only be added/removed from the library*/
@@ -109,6 +122,19 @@ fun BookDescriptionPage(
                 modifier = Modifier.padding(10.dp)
             )
         }
+    }
+}
+
+fun getBookmarkedBook(
+    searchLibrary: (String) -> Unit,
+    uiState: LibraryBookUiState,
+    bookId: String?,
+) : LibraryBooks? {
+    searchLibrary(bookId!!)
+
+    return when(uiState) {
+        is LibraryBookUiState.Success -> uiState.libraryBook
+        else -> null
     }
 }
 

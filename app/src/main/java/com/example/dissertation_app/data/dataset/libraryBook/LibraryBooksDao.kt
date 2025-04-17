@@ -9,11 +9,9 @@ import androidx.room.Update
 
 @Dao
 interface LibraryBooksDao {
-    @Query("SELECT * FROM library_books")
-    fun getAllLibraryBooks(): List<LibraryBooks>
 
-    @Query("SELECT * FROM library_books WHERE id = :id")
-    fun getLibraryBookById(id: Int): LibraryBooks?
+    @Query("SELECT * FROM library_books WHERE bookId = :id")
+    fun getLibraryBookById(id: String): LibraryBooks?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertLibraryBook(libraryBook: LibraryBooks)

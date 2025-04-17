@@ -2,9 +2,8 @@ package com.example.dissertation_app.data.dataset.libraryBook
 
 
 interface LibraryBooksRepository {
-    fun getLibraryBooksStream(): List<LibraryBooks>
 
-    fun getLibraryBookStream(id: Int): LibraryBooks?
+    fun getLibraryBook(id: String): LibraryBooks?
 
     suspend fun insertLibraryBook(libraryBook: LibraryBooks)
 

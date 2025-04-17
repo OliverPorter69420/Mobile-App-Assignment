@@ -1,7 +1,6 @@
 package com.example.dissertation_app.data.dataset.library
 
 class LocalLibraryRepository(private val librariesDao: LibrariesDao) : LibraryRepository {
-    override fun getLibrary(id: Int): Libraries? = librariesDao.getLibraryById(id)
 
     override fun getLibraries(): List<Libraries> = librariesDao.getAllLibraries()
 

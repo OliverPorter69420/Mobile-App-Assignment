@@ -15,13 +15,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 sealed interface LibraryUiState {
-    data class Success(val libraries: List<Libraries>?, val library: Libraries?) : LibraryUiState
+    data class Success(val libraries: List<Libraries>?) : LibraryUiState
     object Error : LibraryUiState
     object Loading : LibraryUiState
 }
 
 class LibraryViewModel(
-    val LibraryRepository: LibraryRepository
+    val libraryRepository: LibraryRepository
 ) : ViewModel() {
     var libraryUiState : LibraryUiState by mutableStateOf(LibraryUiState.Loading)
         private set
@@ -30,8 +30,8 @@ class LibraryViewModel(
         val factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as BookApplication)
-                val LibraryRepository = application.container.libraryRepository
-                LibraryViewModel(LibraryRepository = LibraryRepository)
+                val libraryRepository = application.container.libraryRepository
+                LibraryViewModel(libraryRepository = libraryRepository)
             }
         }
     }
@@ -39,19 +39,8 @@ class LibraryViewModel(
     fun getLibraries() {
         viewModelScope.launch(Dispatchers.IO) {
             libraryUiState = try {
-                val libraries = LibraryRepository.getLibraries()
-                LibraryUiState.Success(libraries = libraries, null)
-            } catch (e: Exception) {
-                LibraryUiState.Error
-            }
-        }
-    }
-
-    fun getLibrary(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            libraryUiState = try {
-                val library = LibraryRepository.getLibrary(id)
-                LibraryUiState.Success(libraries = null, library = library)
+                val libraries = libraryRepository.getLibraries()
+                LibraryUiState.Success(libraries = libraries)
             } catch (e: Exception) {
                 LibraryUiState.Error
             }
@@ -61,7 +50,7 @@ class LibraryViewModel(
     fun addLibrary(library: Libraries) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                LibraryRepository.insertLibrary(library)
+                libraryRepository.insertLibrary(library)
             } catch (e: Exception) {
                 LibraryUiState.Error
             }
@@ -71,7 +60,7 @@ class LibraryViewModel(
     fun removeLibrary(libraryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                LibraryRepository.deleteLibrary(libraryId)
+                libraryRepository.deleteLibrary(libraryId)
             } catch (e: Exception) {
                 LibraryUiState.Error
             }
@@ -81,7 +70,7 @@ class LibraryViewModel(
     fun updateLibrary(library: Libraries) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                LibraryRepository.updateLibrary(library)
+                libraryRepository.updateLibrary(library)
             } catch (e: Exception) {
                 LibraryUiState.Error
             }
