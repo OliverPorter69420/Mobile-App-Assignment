@@ -264,6 +264,7 @@ fun CreateLibraryRow(
         LazyHorizontalGrid(
             rows = Fixed(1),
             modifier = Modifier.height(50.dp)
+                .width(290.dp)
                 .border(width = 3.dp, color = Color.Gray)
         ) {
             items(
