@@ -18,8 +18,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.ui.items.LibraryBookMenu
-import com.example.dissertation_app.ui.items.LibraryBookViewModel
-import com.example.dissertation_app.ui.items.LibraryViewModel
 import com.example.dissertation_app.ui.items.SavedLibraryViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
 
@@ -70,10 +68,9 @@ fun LibraryDescription (
             BookTopAppBar(
                 title = "Library Description Screen",
                 canNavigateBack = true,
-                navigateUp = navigateToLibraryScreen,
                 scrollBehavior = scrollBehavior,
+                navigateUp = navigateToLibraryScreen,
                 iconButtonFunctional = true,
-                buttonFunctionality = {},
                 icon = icon,
                 iconDescription = "account"
             )

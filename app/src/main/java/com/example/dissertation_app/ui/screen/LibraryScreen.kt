@@ -18,15 +18,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.data.dataset.library.Libraries
 import com.example.dissertation_app.ui.items.AddNewLibraries
 import com.example.dissertation_app.ui.items.CreateLibrary
 import com.example.dissertation_app.ui.items.CreateLibraryGrid
-import com.example.dissertation_app.ui.items.LibraryBookViewModel
 import com.example.dissertation_app.ui.items.LibraryViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
 

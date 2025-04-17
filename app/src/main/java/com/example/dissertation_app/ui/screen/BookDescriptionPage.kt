@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,9 +21,11 @@ import androidx.compose.ui.unit.dp
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
+import com.example.dissertation_app.data.dataset.savedLibraries.SavedLibraries
 import com.example.dissertation_app.model.BookObjects
 import com.example.dissertation_app.ui.items.LibraryBookUiState
 import com.example.dissertation_app.ui.items.LibraryBookViewModel
+import com.example.dissertation_app.ui.items.SavedLibraryViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
 
 object BookDescriptionLocation : NavigationDestination {
@@ -57,6 +60,7 @@ fun BookDescriptionPage(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val bookInformation = BookDescriptionLocation.getBookInformation()
     val libraryBookViewModel: LibraryBookViewModel? = BookDescriptionLocation.getLibraryBookViewModel()
+    val savedLibraryViewModel: SavedLibraryViewModel? = LibraryDescriptionLocation.getSavedLibraryViewModel()
     val icon = Icons.Filled.Bookmark
 
     Scaffold (
@@ -71,19 +75,21 @@ fun BookDescriptionPage(
                 scrollBehavior = scrollBehavior,
                 navigateUp = backToSearch,
                 iconButtonFunctional = true,
-                buttonFunctionality = {
+                composableButtonFunctionality = {
 
                     var book = getBookmarkedBook(
                         bookId = bookInformation?.id,
+                        bookInformation = bookInformation,
                         uiState = libraryBookViewModel?.libraryBookUiState!!,
-                        searchLibrary = libraryBookViewModel::searchLibraryBook
+                        searchLibrary = libraryBookViewModel::searchLibraryBook,
+                        addLibraryBook = libraryBookViewModel::addLibraryBook
                     )
 
-                    if (book == null) {
-                        book = bookInformation.toLibraryBook()
-                    }
-
-                    /*todo: make it so that bookmarks can only be added/removed from the library*/
+                    BookMarkAlert(
+                        bookId = book?.id!!,
+                        addBookMark = savedLibraryViewModel!!::saveBookInLibrary,
+                        removeBookMark = savedLibraryViewModel::removeBookFromLibrary
+                    )
                 },
                 icon = icon,
                 iconDescription = "add to library"
@@ -99,7 +105,8 @@ fun BookDescriptionPage(
         ) {
 
             Row (
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier
+                    .padding(10.dp)
                     .align(CenterHorizontally)
                     .width(1000.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -129,13 +136,46 @@ fun getBookmarkedBook(
     searchLibrary: (String) -> Unit,
     uiState: LibraryBookUiState,
     bookId: String?,
+    bookInformation: BookObjects?,
+    addLibraryBook: (LibraryBooks) -> Unit,
 ) : LibraryBooks? {
     searchLibrary(bookId!!)
 
+    when(uiState) {
+        is LibraryBookUiState.Success -> {
+            null
+        }
+        else -> {
+            addLibraryBook(
+                bookInformation.toLibraryBook()!!
+            )
+            searchLibrary(bookId)
+        }
+    }
+
     return when(uiState) {
         is LibraryBookUiState.Success -> uiState.libraryBook
-        else -> null
+        else -> {
+            null
+        }
     }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun BookMarkAlert(
+    bookId: Int,
+    addBookMark: (SavedLibraries) -> Unit,
+    removeBookMark: (Int, Int) -> Unit
+) {
+    BasicAlertDialog(
+        onDismissRequest = TODO(),
+        modifier = TODO(),
+        properties = TODO(),
+        content = TODO()
+    )
+
+    /*todo add an alert which will allow you to add the bookmarked booked to a specfic library*/
 }
 
 private fun BookObjects?.toLibraryBook() : LibraryBooks? {

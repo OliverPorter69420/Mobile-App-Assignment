@@ -16,13 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dissertation_app.BookTopAppBar
 import com.example.dissertation_app.R
 import com.example.dissertation_app.ui.items.BookMenu
 import com.example.dissertation_app.ui.items.BookViewModel
-import com.example.dissertation_app.ui.items.LibraryBookViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
 
 object SearchLocation : NavigationDestination {
@@ -69,6 +66,8 @@ fun SearchScreen (
                 ) {
                     Text(text = "account")
                 }
+
+                /*todo add this button to the top bar*/
             }
         }
     ) {
