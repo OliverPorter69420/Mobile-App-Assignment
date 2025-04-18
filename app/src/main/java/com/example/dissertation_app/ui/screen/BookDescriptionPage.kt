@@ -35,12 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dissertation_app.BookTopAppBar
+import com.example.dissertation_app.DeleteConfirmationDialog
 import com.example.dissertation_app.R
 import com.example.dissertation_app.data.dataset.library.Libraries
 import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
@@ -228,7 +230,7 @@ fun BookMarkAlert(
 
         content = {
             Card (
-                modifier = Modifier.border(2.dp, Color.Gray, shape = RoundedCornerShape(10.dp))
+                modifier = Modifier.border(3.dp, Color.DarkGray, shape = RoundedCornerShape(10.dp))
             ) {
                 Column(
                     modifier = Modifier.padding(10.dp),
@@ -239,8 +241,8 @@ fun BookMarkAlert(
                         text = "Selected a library to add or remove the bookmarked book: ",
                         textAlign = TextAlign.Center,
                         textDecoration = TextDecoration.Underline,
+                        fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        fontStyle = FontStyle.Italic,
                         modifier = Modifier
                             .align(CenterHorizontally)
                             .padding(10.dp)
@@ -283,10 +285,11 @@ fun CreateLibraryRow(
     bookId: Int,
     libraries: List<Libraries>?,
     addBookMark: (SavedLibraries) -> Unit = {},
-    removeBookMark: (Int, Int) -> Unit = { p1: Int, p2: Int -> p1 + p2 },
+    removeBookMark: (libraryId: Int, bookId : Int) -> Unit = { p1: Int, p2: Int -> p1 + p2 },
     onDismiss: () -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    var alertActive by remember {mutableStateOf(false)}
 
     if (libraries == null) {
         Text(
@@ -321,12 +324,7 @@ fun CreateLibraryRow(
                         }
                     } else {
                         {
-                            removeBookMark(
-                                libraryId,
-                                bookId
-                            )
-
-                            onDismiss()
+                            alertActive = true
                         }
                     },
                     modifier = Modifier
@@ -336,7 +334,7 @@ fun CreateLibraryRow(
                         .size(30.dp)
                 ) {
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                        horizontalAlignment = CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Icon(
@@ -347,6 +345,22 @@ fun CreateLibraryRow(
                         Text(
                             text = libraries[libraryId].libraryName,
                             fontSize = 10.sp
+                        )
+                    }
+
+                    if(alertActive) {
+                        DeleteConfirmationDialog(
+                            itemName = libraries[libraryId].libraryName,
+                            onConfirmDelete = {
+                                removeBookMark(
+                                    libraryId,
+                                    bookId
+                                )
+                            },
+                            onDismissRequest = {
+                                alertActive = false
+                                onDismiss
+                            }
                         )
                     }
                 }
