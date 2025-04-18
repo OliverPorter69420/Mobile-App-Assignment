@@ -39,7 +39,6 @@ fun BookTopAppBar(
     buttonFunctionality: () -> Unit = {},
     icon: ImageVector = Icons.AutoMirrored.Filled.ArrowBack,
     iconDescription: String = "back",
-    composableButtonFunctionality: @Composable () -> Unit = {}
 ) {
     Row (
         modifier = modifier,
@@ -73,13 +72,7 @@ fun BookTopAppBar(
 
         if (iconButtonFunctional) {
             IconButton(
-                onClick = (if (buttonFunctionality != {}) {
-                    buttonFunctionality
-                } else if (composableButtonFunctionality != {}) {
-                    composableButtonFunctionality
-                } else {
-                    {}
-                }) as () -> Unit
+                onClick = buttonFunctionality
             ) {
                 Icon(
                     imageVector = icon,

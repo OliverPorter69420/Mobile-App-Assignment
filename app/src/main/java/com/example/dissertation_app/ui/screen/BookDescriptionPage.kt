@@ -3,7 +3,6 @@ package com.example.dissertation_app.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,10 +12,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells.Fixed
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.LibraryBooks
 import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.LibraryBooks
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,11 +25,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -84,6 +90,8 @@ fun BookDescriptionPage(
     val savedLibraryViewModel: SavedLibraryViewModel? = LibraryDescriptionLocation.getSavedLibraryViewModel()
     val icon = Icons.Filled.Bookmark
 
+    var alertActive by remember {mutableStateOf(false)}
+
     Scaffold (
         modifier = Modifier
             .fillMaxSize()
@@ -96,25 +104,8 @@ fun BookDescriptionPage(
                 scrollBehavior = scrollBehavior,
                 navigateUp = backToSearch,
                 iconButtonFunctional = true,
-                composableButtonFunctionality = {
-
-                    var book = getBookmarkedBook(
-                        bookId = bookInformation?.id,
-                        bookInformation = bookInformation,
-                        uiState = libraryBookViewModel?.libraryBookUiState!!,
-                        searchLibrary = libraryBookViewModel::searchLibraryBook,
-                        addLibraryBook = libraryBookViewModel::addLibraryBook
-                    )
-
-                    BookMarkAlert(
-                        bookId = book?.id!!,
-                        uiStateSavedLibrary = savedLibraryViewModel?.savedLibraryUiState!!,
-                        uiStateLibrary = libraryViewModel?.libraryUiState!!,
-                        addBookMark = savedLibraryViewModel::saveBookInLibrary,
-                        removeBookMark = savedLibraryViewModel::removeBookFromLibrary,
-                        findLibraries = libraryViewModel::getLibraries,
-                        findBooksLibrary = savedLibraryViewModel::getBooksLibraries
-                    )
+                buttonFunctionality = {
+                    alertActive = true
                 },
                 icon = icon,
                 iconDescription = "add to library"
@@ -122,6 +113,26 @@ fun BookDescriptionPage(
         }
 
     ) {
+        if(alertActive) {
+            var book = getBookmarkedBook(
+                bookId = bookInformation?.id,
+                bookInformation = bookInformation,
+                uiState = libraryBookViewModel?.libraryBookUiState!!,
+                searchLibrary = libraryBookViewModel::searchLibraryBook,
+                addLibraryBook = libraryBookViewModel::addLibraryBook
+            )
+
+            BookMarkAlert(
+                bookId = book?.id!!,
+                uiStateSavedLibrary = savedLibraryViewModel?.savedLibraryUiState!!,
+                uiStateLibrary = libraryViewModel?.libraryUiState!!,
+                addBookMark = savedLibraryViewModel::saveBookInLibrary,
+                removeBookMark = savedLibraryViewModel::removeBookFromLibrary,
+                findLibraries = libraryViewModel::getLibraries,
+                findBooksLibrary = savedLibraryViewModel::getBooksLibraries,
+                onDismiss = {alertActive = false}
+            )
+        }
         Column(
             modifier = Modifier
                 .padding(it)
@@ -190,12 +201,13 @@ fun getBookmarkedBook(
 @OptIn(ExperimentalMaterial3Api::class)
 fun BookMarkAlert(
     bookId: Int,
-    uiStateSavedLibrary : SavedLibraryUiState?,
-    uiStateLibrary : LibraryUiState?,
+    uiStateSavedLibrary: SavedLibraryUiState?,
+    uiStateLibrary: LibraryUiState?,
     addBookMark: (SavedLibraries) -> Unit = {},
-    removeBookMark: (Int, Int) -> Unit = {p1 : Int, p2 : Int -> p1 + p2},
+    removeBookMark: (Int, Int) -> Unit = { p1: Int, p2: Int -> p1 + p2 },
     findLibraries: () -> Unit = {},
-    findBooksLibrary: (Int) -> Unit = {}
+    findBooksLibrary: (Int) -> Unit = {},
+    onDismiss: () -> Unit = {}
 ) {
     findLibraries()
     val libraries = when(uiStateLibrary) {
@@ -210,36 +222,52 @@ fun BookMarkAlert(
     }
 
     BasicAlertDialog(
-        onDismissRequest = {},
+        onDismissRequest = {onDismiss()},
 
-        modifier = Modifier
-            .border(width = 5.dp, color = Color.DarkGray)
-            .background(Color.LightGray),
+        modifier = Modifier.padding(5.dp),
 
         content = {
             Card (
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.border(2.dp, Color.Gray, shape = RoundedCornerShape(10.dp))
             ) {
                 Column(
+                    modifier = Modifier.padding(10.dp),
                     horizontalAlignment = CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text("Selected a library to add/remove the books from: ")
+                    Text(
+                        text = "Selected a library to add or remove the bookmarked book: ",
+                        textAlign = TextAlign.Center,
+                        textDecoration = TextDecoration.Underline,
+                        fontSize = 16.sp,
+                        fontStyle = FontStyle.Italic,
+                        modifier = Modifier
+                            .align(CenterHorizontally)
+                            .padding(10.dp)
+                    )
 
-                    Text("Add to a libraries")
+                    Text(
+                        text = "Add to these libraries",
+                        modifier = Modifier.padding(10.dp)
+                    )
 
                     CreateLibraryRow(
                         bookId = bookId,
                         libraries = libraries,
                         addBookMark = addBookMark,
+                        onDismiss = onDismiss,
                     )
 
-                    Text("Remove from these Libraries")
+                    Text(
+                        text = "Remove from these Libraries",
+                        modifier = Modifier.padding(10.dp)
+                    )
 
                     CreateLibraryRow(
                         bookId = bookId,
                         libraries = libraries,
                         removeBookMark = removeBookMark,
+                        onDismiss = onDismiss,
                     )
                 }
             }
@@ -250,20 +278,25 @@ fun BookMarkAlert(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateLibraryRow(
-    bookId : Int,
+    bookId: Int,
     libraries: List<Libraries>?,
     addBookMark: (SavedLibraries) -> Unit = {},
-    removeBookMark: (Int, Int) -> Unit = {p1 : Int, p2 : Int -> p1 + p2}
+    removeBookMark: (Int, Int) -> Unit = { p1: Int, p2: Int -> p1 + p2 },
+    onDismiss: () -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     if (libraries == null) {
-        Text("No Libraries exist")
+        Text(
+            text = "No Libraries exist",
+            fontSize = 10.sp
+        )
 
     } else {
         LazyHorizontalGrid(
             rows = Fixed(1),
-            modifier = Modifier.height(50.dp)
+            modifier = Modifier
+                .height(50.dp)
                 .width(290.dp)
                 .border(width = 3.dp, color = Color.Gray)
         ) {
@@ -281,6 +314,8 @@ fun CreateLibraryRow(
                                     bookID = bookId
                                 )
                             )
+
+                            onDismiss()
                         }
                     } else {
                         {
@@ -288,6 +323,8 @@ fun CreateLibraryRow(
                                 libraryId,
                                 bookId
                             )
+
+                            onDismiss()
                         }
                     },
                     modifier = Modifier
@@ -337,10 +374,7 @@ fun BookMarkAlertPreview() {
         bookId = 1,
         uiStateSavedLibrary = null,
         uiStateLibrary = null,
-        addBookMark = {},
         removeBookMark = { p1: Int, p2: Int -> p1 + p2 },
-        findLibraries = {},
-        findBooksLibrary = {},
     )
 }
 
