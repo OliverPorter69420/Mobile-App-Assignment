@@ -98,5 +98,10 @@ fun HomeScreen(
             }
         }
     }
-
 }
+
+/* todo: test this whole program with real data and then bug test it all (might record results for the report)
+*   also finish the report diagrams (need to add an architecture diagram and uml diagram)
+*   the big thing code wise to add yet is accounts, but that might be after making sure the program as is works
+*   Also, need to add in a lot of little things and fixes, just because they can be added,
+*   need to also make the whole code more consistent in how I did things so it all looks more together*/
