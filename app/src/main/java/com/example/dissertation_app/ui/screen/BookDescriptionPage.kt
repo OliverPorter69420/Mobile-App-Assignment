@@ -248,6 +248,7 @@ fun BookMarkAlert(
 
                     Text(
                         text = "Add to these libraries",
+                        textDecoration = TextDecoration.Underline,
                         modifier = Modifier.padding(10.dp)
                     )
 
@@ -260,12 +261,13 @@ fun BookMarkAlert(
 
                     Text(
                         text = "Remove from these Libraries",
+                        textDecoration = TextDecoration.Underline,
                         modifier = Modifier.padding(10.dp)
                     )
 
                     CreateLibraryRow(
                         bookId = bookId,
-                        libraries = libraries,
+                        libraries = booksLibrary,
                         removeBookMark = removeBookMark,
                         onDismiss = onDismiss,
                     )
