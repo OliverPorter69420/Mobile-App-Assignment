@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -234,20 +233,12 @@ fun BookMarkAlert(
     findBooksLibrary: (Int) -> Unit = {},
     onDismiss: () -> Unit = {}
 ) {
-    findLibraries()
-    val libraries = when(uiStateLibrary) {
-        is LibraryUiState.Success -> uiStateLibrary.libraries
-        else -> null
-    }
+    var currentLibraries by remember {mutableStateOf(getLibraries(findLibraries, uiStateLibrary))}
 
-    findBooksLibrary(bookId)
-    val booksLibrary = when(uiStateSavedLibrary) {
-        is SavedLibraryUiState.Success -> uiStateSavedLibrary.libraries
-        else -> null
-    }
+    var currentBooksLibrary by remember {mutableStateOf(getBooksLibrary(findBooksLibrary, bookId, uiStateSavedLibrary))}
 
-    Log.d("BookMarkAlert", "libraries: $libraries")
-    Log.d("BookMarkAlert", "booksLibrary: $booksLibrary")
+    Log.d("BookMarkAlert", "libraries: $currentLibraries")
+    Log.d("BookMarkAlert", "booksLibrary: $currentBooksLibrary")
     Log.d("BookMarkAlert", "bookId: $bookId")
 
     BasicAlertDialog(
@@ -283,9 +274,13 @@ fun BookMarkAlert(
 
                     CreateLibraryRow(
                         bookId = bookId,
-                        libraries = libraries,
+                        libraries = currentLibraries,
                         removingBooks = false,
                         bookmarkFunctionality = addBookMark,
+                        resetValues = {
+                            currentLibraries = getLibraries(findLibraries, uiStateLibrary)
+                            currentBooksLibrary = getBooksLibrary(findBooksLibrary, bookId, uiStateSavedLibrary)
+                        },
                         onDismiss = onDismiss,
                     )
 
@@ -297,9 +292,13 @@ fun BookMarkAlert(
 
                     CreateLibraryRow(
                         bookId = bookId,
-                        libraries = booksLibrary,
+                        libraries = currentBooksLibrary,
                         removingBooks = true,
                         bookmarkFunctionality = removeBookMark,
+                        resetValues =  {
+                            currentLibraries = getLibraries(findLibraries, uiStateLibrary)
+                            currentBooksLibrary = getBooksLibrary(findBooksLibrary, bookId, uiStateSavedLibrary)
+                        },
                         onDismiss = onDismiss,
                     )
                 }
@@ -308,13 +307,39 @@ fun BookMarkAlert(
     )
 }
 
+private fun getBooksLibrary(
+    findBooksLibrary: (Int) -> Unit,
+    bookId: Int,
+    uiStateSavedLibrary: SavedLibraryUiState?
+): List<Libraries>? {
+    findBooksLibrary(bookId)
+    val booksLibrary = when (uiStateSavedLibrary) {
+        is SavedLibraryUiState.Success -> uiStateSavedLibrary.libraries
+        else -> null
+    }
+    return booksLibrary
+}
+
+private fun getLibraries(
+    findLibraries: () -> Unit,
+    uiStateLibrary: LibraryUiState?
+): List<Libraries>? {
+    findLibraries()
+    val libraries = when (uiStateLibrary) {
+        is LibraryUiState.Success -> uiStateLibrary.libraries
+        else -> null
+    }
+    return libraries
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateLibraryRow(
     bookId: Int,
     libraries: List<Libraries>?,
-    removingBooks : Boolean,
+    removingBooks: Boolean,
     bookmarkFunctionality: (SavedLibraries) -> Unit = {},
+    resetValues: () -> Unit = {},
     onDismiss: () -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -349,6 +374,8 @@ fun CreateLibraryRow(
                         )
 
                         alertActive = removingBooks
+
+                        resetValues()
                     },
                     modifier = Modifier
                         .background(Color.Gray)
