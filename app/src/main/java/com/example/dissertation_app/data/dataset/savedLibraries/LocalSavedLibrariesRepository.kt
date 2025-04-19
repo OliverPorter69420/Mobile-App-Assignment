@@ -10,5 +10,5 @@ class LocalSavedLibrariesRepository(private val savedLibrariesDao: SavedLibrarie
 
     override suspend fun saveBookInLibrary(savedLibrary: SavedLibraries) = savedLibrariesDao.saveBookInLibrary(savedLibrary)
 
-    override suspend fun removeBookFromLibrary(libraryId: Int, bookID: Int) = savedLibrariesDao.removeBookFromLibrary(libraryId, bookID)
+    override suspend fun removeBookFromLibrary(savedLibrary: SavedLibraries) = savedLibrariesDao.removeBookFromLibrary(savedLibrary)
 }

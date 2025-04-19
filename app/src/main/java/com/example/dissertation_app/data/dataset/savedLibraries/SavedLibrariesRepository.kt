@@ -11,5 +11,5 @@ interface SavedLibrariesRepository {
 
     suspend fun saveBookInLibrary(savedLibrary: SavedLibraries)
 
-    suspend fun removeBookFromLibrary(libraryId: Int, bookID: Int)
+    suspend fun removeBookFromLibrary(savedLibrary: SavedLibraries)
 }

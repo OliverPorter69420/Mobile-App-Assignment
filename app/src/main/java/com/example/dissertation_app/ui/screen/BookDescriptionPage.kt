@@ -229,7 +229,7 @@ fun BookMarkAlert(
     uiStateSavedLibrary: SavedLibraryUiState?,
     uiStateLibrary: LibraryUiState?,
     addBookMark: (SavedLibraries) -> Unit = {},
-    removeBookMark: (Int, Int) -> Unit = { p1: Int, p2: Int -> p1 + p2 },
+    removeBookMark: (SavedLibraries) -> Unit = {},
     findLibraries: () -> Unit = {},
     findBooksLibrary: (Int) -> Unit = {},
     onDismiss: () -> Unit = {}
@@ -245,6 +245,10 @@ fun BookMarkAlert(
         is SavedLibraryUiState.Success -> uiStateSavedLibrary.libraries
         else -> null
     }
+
+    Log.d("BookMarkAlert", "libraries: $libraries")
+    Log.d("BookMarkAlert", "booksLibrary: $booksLibrary")
+    Log.d("BookMarkAlert", "bookId: $bookId")
 
     BasicAlertDialog(
         onDismissRequest = {onDismiss()},
@@ -280,7 +284,8 @@ fun BookMarkAlert(
                     CreateLibraryRow(
                         bookId = bookId,
                         libraries = libraries,
-                        addBookMark = addBookMark,
+                        removingBooks = false,
+                        bookmarkFunctionality = addBookMark,
                         onDismiss = onDismiss,
                     )
 
@@ -293,7 +298,8 @@ fun BookMarkAlert(
                     CreateLibraryRow(
                         bookId = bookId,
                         libraries = booksLibrary,
-                        removeBookMark = removeBookMark,
+                        removingBooks = true,
+                        bookmarkFunctionality = removeBookMark,
                         onDismiss = onDismiss,
                     )
                 }
@@ -307,8 +313,8 @@ fun BookMarkAlert(
 fun CreateLibraryRow(
     bookId: Int,
     libraries: List<Libraries>?,
-    addBookMark: (SavedLibraries) -> Unit = {},
-    removeBookMark: (libraryId: Int, bookId : Int) -> Unit = { p1: Int, p2: Int -> p1 + p2 },
+    removingBooks : Boolean,
+    bookmarkFunctionality: (SavedLibraries) -> Unit = {},
     onDismiss: () -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -334,21 +340,15 @@ fun CreateLibraryRow(
             ) { libraryId ->
 
                 Surface(
-                    onClick = if (addBookMark != {}) {
-                        {
-                            addBookMark(
-                                SavedLibraries(
-                                    libraryId = libraryId,
-                                    bookID = bookId
-                                )
+                    onClick = {
+                        bookmarkFunctionality(
+                            SavedLibraries(
+                                libraries[libraryId].id,
+                                bookId
                             )
+                        )
 
-                            onDismiss()
-                        }
-                    } else {
-                        {
-                            alertActive = true
-                        }
+                        alertActive = removingBooks
                     },
                     modifier = Modifier
                         .background(Color.Gray)
@@ -375,9 +375,11 @@ fun CreateLibraryRow(
                         DeleteConfirmationDialog(
                             itemName = libraries[libraryId].libraryName,
                             onConfirmDelete = {
-                                removeBookMark(
-                                    libraryId,
-                                    bookId
+                                bookmarkFunctionality(
+                                    SavedLibraries(
+                                        libraries[libraryId].id,
+                                        bookId
+                                    )
                                 )
                             },
                             onDismissRequest = {
@@ -413,7 +415,6 @@ fun BookMarkAlertPreview() {
         bookId = 1,
         uiStateSavedLibrary = null,
         uiStateLibrary = null,
-        removeBookMark = { p1: Int, p2: Int -> p1 + p2 },
     )
 }
 
@@ -457,6 +458,7 @@ fun CreateLibraryRowPreview() {
 
     CreateLibraryRow(
         bookId = 1,
-        libraries = libraries.toList()
+        libraries = libraries.toList(),
+        removingBooks = false
     )
 }

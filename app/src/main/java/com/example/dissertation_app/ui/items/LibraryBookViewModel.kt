@@ -45,7 +45,12 @@ class LibraryBookViewModel(
             libraryBookUiState = try {
                 val book = libraryRepository.getLibraryBook(id)
 
-                LibraryBookUiState.Success(book)
+                if (book == null) {
+                    LibraryBookUiState.Empty
+                } else {
+                    LibraryBookUiState.Success(book)
+                }
+
             } catch (e: Exception) {
                 LibraryBookUiState.Error
             }

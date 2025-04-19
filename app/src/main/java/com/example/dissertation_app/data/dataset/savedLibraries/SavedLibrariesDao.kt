@@ -20,6 +20,6 @@ interface SavedLibrariesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun saveBookInLibrary(savedLibrary: SavedLibraries)
 
-    @Query("DELETE FROM saved_libraries WHERE libraryId = :libraryId AND bookID = :bookID")
-    fun removeBookFromLibrary(libraryId: Int, bookID: Int)
+    @Delete
+    fun removeBookFromLibrary(savedLibrary: SavedLibraries)
 }

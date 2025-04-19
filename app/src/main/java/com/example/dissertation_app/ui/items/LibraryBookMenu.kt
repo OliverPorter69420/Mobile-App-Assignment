@@ -39,6 +39,7 @@ import coil.memory.MemoryCache
 import coil.request.ImageRequest
 import com.example.dissertation_app.R
 import com.example.dissertation_app.data.dataset.libraryBook.LibraryBooks
+import com.example.dissertation_app.data.dataset.savedLibraries.SavedLibraries
 import com.example.dissertation_app.model.BookObjects
 import com.example.dissertation_app.model.VolumeInfo
 import com.example.dissertation_app.ui.screen.BookDescriptionLocation
@@ -51,7 +52,7 @@ fun LibraryBookMenu(
     uiState: SavedLibraryUiState,
     navigateToBookDescription: () -> Unit = {},
     getBooks: (Int) -> Unit = {},
-    deleteBook: (Int,Int) -> Unit
+    deleteBook: (SavedLibraries) -> Unit
 ) {
     val currentIndex = LibraryLocation.viewCurrentLibraryIndex()
 
@@ -117,8 +118,8 @@ fun LibraryBookGrid(
     libraryBooks: List<LibraryBooks>?,
     currentIndex: Int,
     getBooks: Unit,
-    deleteBooks: (Int, Int) -> Unit,
-    navigateToBookDescription: () -> Unit,
+    deleteBooks: (SavedLibraries) -> Unit = {},
+    navigateToBookDescription: () -> Unit = {},
 ) {
     LazyVerticalGrid(
         columns = Fixed(1),
@@ -133,7 +134,12 @@ fun LibraryBookGrid(
             CreateLibraryBookBox(
                 libraryBook = libraryBooks?.get(libraryBooksId)!!,
                 getBooks = getBooks,
-                deleteBooks = deleteBooks(currentIndex, libraryBooksId),
+                deleteBooks = deleteBooks(
+                    SavedLibraries(
+                        currentIndex,
+                        libraryBooksId
+                    )
+                ),
                 navigateToBookDescription = navigateToBookDescription
             )
         }
@@ -348,9 +354,7 @@ fun LibraryBookGridPreview() {
         modifier = Modifier,
         libraryBooks = libraryBook.toList(),
         currentIndex = 1,
-        getBooks = Unit,
-        deleteBooks = {p1 : Int, p2: Int -> p1 + p2},
-        navigateToBookDescription = {}
+        getBooks = Unit
     )
 }
 

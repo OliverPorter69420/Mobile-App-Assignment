@@ -1,5 +1,6 @@
 package com.example.dissertation_app.ui.items
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -65,18 +66,31 @@ class SavedLibraryViewModel(
     fun saveBookInLibrary(savedLibrary: SavedLibraries) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                Log.e("BookMarkAlert", savedLibrary.toString())
                 savedLibrariesRepository.saveBookInLibrary(savedLibrary)
+
             } catch (e: Exception) {
+
+                Log.e("BookMarkAlert", savedLibrary.toString())
+                Log.e("BookMarkAlert", e.toString())
+
                 SavedLibraryUiState.Error
             }
         }
     }
 
-    fun removeBookFromLibrary(libraryId: Int, bookId : Int) {
+    fun removeBookFromLibrary(savedLibrary: SavedLibraries)  {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                savedLibrariesRepository.removeBookFromLibrary(libraryId, bookId)
+                Log.e("BookMarkAlert", savedLibrary.toString())
+
+                savedLibrariesRepository.removeBookFromLibrary(savedLibrary)
             } catch (e: Exception) {
+
+                Log.e("BookMarkAlert", savedLibrary.toString())
+
+                Log.e("BookMarkAlert", e.toString())
+
                 SavedLibraryUiState.Error
             }
         }
