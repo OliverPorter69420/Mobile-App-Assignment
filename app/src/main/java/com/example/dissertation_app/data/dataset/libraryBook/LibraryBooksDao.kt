@@ -13,7 +13,7 @@ interface LibraryBooksDao {
     @Query("SELECT * FROM library_books WHERE bookId = :id")
     fun getLibraryBookById(id: String): LibraryBooks?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertLibraryBook(libraryBook: LibraryBooks)
 
     @Update

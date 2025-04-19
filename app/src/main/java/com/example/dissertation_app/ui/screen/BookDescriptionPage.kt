@@ -1,5 +1,6 @@
 package com.example.dissertation_app.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -55,6 +56,7 @@ import com.example.dissertation_app.ui.items.LibraryViewModel
 import com.example.dissertation_app.ui.items.SavedLibraryUiState
 import com.example.dissertation_app.ui.items.SavedLibraryViewModel
 import com.example.dissertation_app.ui.navigation.NavigationDestination
+import kotlin.toString
 
 object BookDescriptionLocation : NavigationDestination {
     override val route = "bookDescription"
@@ -124,16 +126,24 @@ fun BookDescriptionPage(
                 addLibraryBook = libraryBookViewModel::addLibraryBook
             )
 
-            BookMarkAlert(
-                bookId = book?.id!!,
-                uiStateSavedLibrary = savedLibraryViewModel?.savedLibraryUiState!!,
-                uiStateLibrary = libraryViewModel?.libraryUiState!!,
-                addBookMark = savedLibraryViewModel::saveBookInLibrary,
-                removeBookMark = savedLibraryViewModel::removeBookFromLibrary,
-                findLibraries = libraryViewModel::getLibraries,
-                findBooksLibrary = savedLibraryViewModel::getBooksLibraries,
-                onDismiss = {alertActive = false}
-            )
+            Log.d("Bookmarked Book", bookInformation?.id.toString())
+
+            Log.d("Bookmarked Book", book.toString())
+
+            savedLibraryViewModel?.let { savedLibraryViewModel ->
+                libraryViewModel?.let { libraryViewModel ->
+                    BookMarkAlert(
+                        bookId = book?.id ?: -1,
+                        uiStateSavedLibrary = savedLibraryViewModel.savedLibraryUiState,
+                        uiStateLibrary = libraryViewModel.libraryUiState,
+                        addBookMark = savedLibraryViewModel::saveBookInLibrary,
+                        removeBookMark = savedLibraryViewModel::removeBookFromLibrary,
+                        findLibraries = libraryViewModel::getLibraries,
+                        findBooksLibrary = savedLibraryViewModel::getBooksLibraries,
+                        onDismiss = {alertActive = false}
+                    )
+                }
+            }
         }
         Column(
             modifier = Modifier
@@ -177,24 +187,37 @@ fun getBookmarkedBook(
     bookInformation: BookObjects?,
     addLibraryBook: (LibraryBooks) -> Unit,
 ) : LibraryBooks? {
-    searchLibrary(bookId!!)
 
-    when(uiState) {
-        is LibraryBookUiState.Success -> {
-            null
-        }
-        else -> {
-            addLibraryBook(
-                bookInformation.toLibraryBook()!!
-            )
-            searchLibrary(bookId)
-        }
+    if (bookId == null || bookInformation == null) {
+        Log.w("Bookmarked Book", "Missing bookId or bookInformation")
+        return null
     }
 
-    return when(uiState) {
-        is LibraryBookUiState.Success -> uiState.libraryBook
-        else -> {
+    searchLibrary(bookId)
+
+    Log.d("Bookmarked Book - After Search", uiState.toString())
+
+    return when (uiState) {
+        is LibraryBookUiState.Success -> {
+            Log.d("Bookmarked Book", "Found book: ${uiState.libraryBook}")
+            uiState.libraryBook
+        }
+        is LibraryBookUiState.FunctionSuccess -> {
+            Log.d("Bookmarked Book", "Book added successfully (FunctionSuccess state).")
             null
+        }
+        else -> {
+            Log.d("Bookmarked Book", "Book not found, attempting to add.")
+
+            val libraryBook = bookInformation.toLibraryBook()
+            if (libraryBook != null) {
+                addLibraryBook(libraryBook)
+
+                null
+            } else {
+                Log.w("Bookmarked Book", "Could not convert bookInformation to LibraryBooks")
+                null
+            }
         }
     }
 }
@@ -291,7 +314,7 @@ fun CreateLibraryRow(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     var alertActive by remember {mutableStateOf(false)}
 
-    if (libraries == null) {
+    if (libraries == null || libraries.isEmpty()) {
         Text(
             text = "No Libraries exist",
             fontSize = 10.sp
