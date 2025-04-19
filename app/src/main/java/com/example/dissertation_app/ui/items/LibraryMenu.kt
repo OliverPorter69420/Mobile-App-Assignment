@@ -54,14 +54,11 @@ import com.example.dissertation_app.ui.screen.LibraryDescriptionLocation
 import com.example.dissertation_app.ui.screen.LibraryLocation
 import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateLibraryGrid(
     librariesUiStates: LibraryUiState?,
     navigateToLibraryDescription: () -> Unit = {}
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
     when (librariesUiStates) {
         is LibraryUiState.Success -> {
             CreateGridStructure(
@@ -69,20 +66,29 @@ fun CreateLibraryGrid(
                 navigateToLibraryDescription = navigateToLibraryDescription
             )
         }
-        is LibraryUiState.Loading -> Text(text = "Loading")
-        is LibraryUiState.Error -> Text(text = "Error")
-        null -> Text(text = "null")
+
+        else -> {
+            Column {
+                Text(
+                    text = "No libraries exist, maybe create one?"
+                )
+            }
+        }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateGridStructure(
     libraries : List<Libraries>?,
     navigateToLibraryDescription: () -> Unit = {}
 ) {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
     LazyVerticalGrid(
         columns = Fixed(2),
         modifier = Modifier.padding(10.dp)
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         items(
             count = libraries?.size ?: 0,
